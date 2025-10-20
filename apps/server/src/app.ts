@@ -14,6 +14,8 @@ import ordersRouter from './modules/orders/router'
 import usersRouter from './modules/users/router'
 
 const app = express()
+// When behind reverse proxies (e.g., Render/Heroku/Nginx), trust the proxy to get correct IPs
+app.set('trust proxy', 1)
 
 // Helmet: allow cross-origin resource policy so SPA on different port can load /uploads images
 app.use(helmet({
