@@ -82,7 +82,8 @@ const candidateClientDirs = [
   path.resolve(__dirname, '../client/dist'),
   path.resolve(process.cwd(), '../client/dist'),
   path.resolve(process.cwd(), '../../client/dist'),
-  path.resolve(process.cwd(), 'client/dist')
+  path.resolve(process.cwd(), 'client/dist'),
+  path.resolve(process.cwd(), 'apps/client/dist')
 ]
 
 const clientDistPath = candidateClientDirs.find((p) => fs.existsSync(path.join(p, 'index.html')))
