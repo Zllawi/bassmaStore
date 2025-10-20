@@ -1,0 +1,20 @@
+{
+  "name": "modern-shop-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -c magenta,cyan -n server,client \"npm:dev --workspace @shop/server\" \"npm:dev --workspace @shop/client\"",
+    "build": "npm run build --workspace @shop/server && npm run build --workspace @shop/client",
+    "start": "npm run start --workspace @shop/server",
+    "format": "echo 'add a formatter if you like'"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  },
+  "dependencies": {
+    "mongodb": "^2.2.12"
+  }
+}

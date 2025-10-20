@@ -1,0 +1,29 @@
+# Node
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+package-lock.json
+
+# Env
+.env
+.env.local
+apps/server/.env
+apps/server/.env.local
+apps/client/.env
+
+# Build
+dist/
+build/
+.turbo/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Uploads (dev only)
+apps/server/uploads/
+
