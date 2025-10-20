@@ -22,7 +22,7 @@ npm install
 2) Configure env
 
 - Copy `.env.example` to `apps/server/.env` and adjust values (MongoDB URI, JWT secrets, etc.)
-- Optionally create `apps/client/.env` to override `VITE_API_BASE` (defaults to `http://localhost:8080/api/v1`).
+- Optionally create `apps/client/.env` for dev overrides (e.g. `VITE_API_BASE=http://localhost:8080/api/v1`).
 
 3) Seed dev data (optional but recommended)
 
@@ -80,7 +80,23 @@ Env (see `apps/server/.env.example`):
 
 ## Notes
 - This codebase is intentionally modular for extensibility: payments gateway interface, integrations layer (SMS/Email/Webhooks) hooks, storage adapters.
- - On free instances (no persistent disk, possible cold starts):
-   - Use MongoDB Atlas (set `DB_VENDOR=mongodb` and `MONGODB_URI`).
-   - Use Cloudinary for uploads (`UPLOADS_PROVIDER=cloudinary`).
-   - Cookies: in production the refresh token uses `Secure` and `SameSite=None` to work with cross‑origin frontends.
+- On free instances (no persistent disk, possible cold starts):
+  - Use MongoDB Atlas (set `DB_VENDOR=mongodb` and `MONGODB_URI`).
+  - Use Cloudinary for uploads (`UPLOADS_PROVIDER=cloudinary`).
+  - Cookies: in production the refresh token uses `Secure` and `SameSite=None` to work with cross-origin frontends.
+
+## Deployment (Render single service)
+- Root directory: repository root
+- Build command: `yarn install && yarn build`
+- Start command: `yarn workspace @shop/server start`
+- Environment variables:
+  - `NODE_ENV=production`
+  - `NODE_VERSION=20`
+  - `CORS_ORIGIN=https://your-frontend-domain`
+  - `DB_VENDOR=mongodb` and `MONGODB_URI=<atlas-connection-string>`
+  - `UPLOADS_PROVIDER=cloudinary` plus `CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>` (or the individual keys)
+  - `JWT_ACCESS_SECRET` and `JWT_REFRESH_SECRET`
+- Deploy flow:
+  1. `yarn build` runs both server and client; the SPA is output to `apps/client/dist`.
+  2. Express serves `/api/v1/*` and static assets from that dist folder. Any non-API path falls back to `index.html` so client routing works.
+  3. Health check endpoint: `GET /api/v1/health`.

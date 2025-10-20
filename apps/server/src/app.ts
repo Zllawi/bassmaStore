@@ -3,6 +3,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
+import fs from 'fs'
 import path from 'path'
 import mongoose from 'mongoose'
 import { env } from './config/env'
@@ -59,10 +60,11 @@ app.use(cookieParser())
 app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')))
 app.use(rateLimiter)
 
-// Friendly root route for platform/browser visits
-app.get('/', (_req, res) => {
-  res.type('text/plain').send('API is running. See /api/v1/health')
-})
+const clientDistPath = path.resolve(process.cwd(), '../client/dist')
+const hasClientBuild = fs.existsSync(clientDistPath)
+if (hasClientBuild) {
+  app.use(express.static(clientDistPath))
+}
 
 app.get('/api/v1/health', (_req, res) => res.json({ ok: true }))
 
@@ -97,6 +99,19 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/products', productsRouter)
 app.use('/api/v1/orders', ordersRouter)
 app.use('/api/v1/users', usersRouter)
+
+if (hasClientBuild) {
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/')) return next()
+    if (req.path.startsWith('/uploads/')) return next()
+    res.sendFile(path.join(clientDistPath, 'index.html'))
+  })
+} else {
+  // Friendly root route for platform/browser visits when SPA isn't bundled with the API
+  app.get('/', (_req, res) => {
+    res.type('text/plain').send('API is running. See /api/v1/health')
+  })
+}
 
 app.use(notFound)
 app.use(onError)
