@@ -60,10 +60,10 @@ app.use(cookieParser())
 app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')))
 app.use(rateLimiter)
 
-const clientDistPath = path.resolve(process.cwd(), '../client/dist')
+const clientDistPath = path.resolve(__dirname, '../../client/dist')
 const hasClientBuild = fs.existsSync(clientDistPath)
 if (hasClientBuild) {
-  app.use(express.static(clientDistPath))
+  app.use(express.static(clientDistPath, { index: false }))
 }
 
 app.get('/api/v1/health', (_req, res) => res.json({ ok: true }))
