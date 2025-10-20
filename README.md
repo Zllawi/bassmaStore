@@ -57,9 +57,14 @@ npm run dev
 - Perf: code-splitting + lazy routes
 - Security: Helmet, CORS, rate-limit, input validation via Zod
 
-## Dev Image Uploads
-- Local uploads stored under `apps/server/uploads/` via Multer
-- Storage abstraction ready for cloud swap (e.g., S3, Cloudinary)
+## Uploads (Dev/Prod)
+- Development: local uploads under `apps/server/uploads/` via Multer.
+- Production/ephemeral hosting: set `UPLOADS_PROVIDER=cloudinary` and Cloudinary credentials. The server switches to memory storage and streams files to Cloudinary, returning permanent HTTPS URLs.
+
+Env (see `apps/server/.env.example`):
+- `UPLOADS_PROVIDER=cloudinary`
+- Either `CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>` or set `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`.
+- Optional: `CLOUDINARY_FOLDER` (defaults to `shop-uploads`).
 
 ## Firestore Toggle
 - Set `DB_VENDOR=firebase` and provide FIREBASE_* envs to use the Firestore data layer. MongoDB via Mongoose remains the default and fully implemented path.
@@ -75,4 +80,7 @@ npm run dev
 
 ## Notes
 - This codebase is intentionally modular for extensibility: payments gateway interface, integrations layer (SMS/Email/Webhooks) hooks, storage adapters.
-
+ - On free instances (no persistent disk, possible cold starts):
+   - Use MongoDB Atlas (set `DB_VENDOR=mongodb` and `MONGODB_URI`).
+   - Use Cloudinary for uploads (`UPLOADS_PROVIDER=cloudinary`).
+   - Cookies: in production the refresh token uses `Secure` and `SameSite=None` to work with cross‑origin frontends.

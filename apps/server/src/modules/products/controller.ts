@@ -6,12 +6,15 @@ import * as svc from './service'
 import { parseMaybeNumber } from '../../utils/num'
 import { productCreateSchema, productUpdateSchema } from '../../utils/validators'
 import { requireRole } from '../../middlewares/auth'
+import { env } from '../../config/env'
+import { uploadToCloud } from '../../services/uploader'
 
-// Local dev uploads: store under uploads/
-const storage = multer.diskStorage({
+// Use memory storage when targeting cloud provider; disk for local dev
+const diskStorage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, path.resolve(process.cwd(), 'uploads')),
   filename: (_req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 })
+const storage = env.UPLOADS_PROVIDER === 'cloudinary' ? multer.memoryStorage() : diskStorage
 export const upload = multer({ storage })
 
 export const list = asyncHandler(async (req: Request, res: Response) => {
@@ -53,7 +56,14 @@ export const create = [requireRole('admin'), asyncHandler(async (req: Request, r
   }
 
   const files = (req as any).files as Express.Multer.File[] | undefined
-  const images = files?.map(f => '/uploads/' + path.basename(f.path)) || []
+  let images: string[] = []
+  if (files && files.length) {
+    if (env.UPLOADS_PROVIDER === 'cloudinary') {
+      images = await uploadToCloud(files)
+    } else {
+      images = files.map(f => '/uploads/' + path.basename((f as any).path))
+    }
+  }
   const body = parsed.data
   const data = await svc.create({ ...body, images: images.length ? images : body.images })
   const base = `${req.protocol}://${req.get('host')}`
@@ -84,7 +94,7 @@ export const update = [requireRole('admin'), asyncHandler(async (req: Request, r
   let updateBody: any = { ...parsed.data }
 
   if (files && files.length) {
-    const images = files.map(f => '/uploads/' + path.basename(f.path))
+    const images = env.UPLOADS_PROVIDER === 'cloudinary' ? await uploadToCloud(files) : files.map(f => '/uploads/' + path.basename((f as any).path))
     const action = (req.query.imagesAction as string) || 'append'
     if (action === 'replace') updateBody.images = images
     else if (action === 'append') {

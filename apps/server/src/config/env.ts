@@ -12,7 +12,13 @@ const envSchema = z.object({
   MONGODB_URI: z.string().optional(),
   FIREBASE_PROJECT_ID: z.string().optional(),
   FIREBASE_CLIENT_EMAIL: z.string().optional(),
-  FIREBASE_PRIVATE_KEY: z.string().optional()
+  FIREBASE_PRIVATE_KEY: z.string().optional(),
+  // Uploads
+  UPLOADS_PROVIDER: z.enum(['local','cloudinary']).default('local'),
+  CLOUDINARY_CLOUD_NAME: z.string().optional(),
+  CLOUDINARY_API_KEY: z.string().optional(),
+  CLOUDINARY_API_SECRET: z.string().optional(),
+  CLOUDINARY_FOLDER: z.string().optional()
 })
 
 export const env = envSchema.parse(process.env)

@@ -1,19 +1,22 @@
 import { Request, Response } from 'express'
 import { asyncHandler } from '../../utils/asyncHandler'
 import { loginSchema, registerSchema } from '../../utils/validators'
+import { env } from '../../config/env'
 import * as svc from './service'
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const dto = registerSchema.parse(req.body)
   const { user, accessToken, refreshToken } = await svc.register(dto.name, dto.email, dto.password, dto.phone, dto.city, (dto as any).region, (dto as any).addressDescription)
-  res.cookie('rt', refreshToken, { httpOnly: true, sameSite: 'lax', secure: false, maxAge: 7*24*60*60*1000 })
+  const prod = env.NODE_ENV === 'production'
+  res.cookie('rt', refreshToken, { httpOnly: true, sameSite: prod ? 'none' : 'lax', secure: prod, maxAge: 7*24*60*60*1000 })
   res.status(201).json({ data: { id: user.id, name: user.name, email: user.email, role: user.role, phone: user.phone, city: user.city, region: (user as any).region, addressDescription: (user as any).addressDescription, accessToken } })
 })
 
 export const login = asyncHandler(async (req: Request, res: Response) => {
   const dto = loginSchema.parse(req.body)
   const { user, accessToken, refreshToken } = await svc.login(dto.email, dto.password)
-  res.cookie('rt', refreshToken, { httpOnly: true, sameSite: 'lax', secure: false, maxAge: 7*24*60*60*1000 })
+  const prod = env.NODE_ENV === 'production'
+  res.cookie('rt', refreshToken, { httpOnly: true, sameSite: prod ? 'none' : 'lax', secure: prod, maxAge: 7*24*60*60*1000 })
   res.json({ data: { id: user.id, name: user.name, email: user.email, role: user.role, phone: (user as any).phone, city: (user as any).city, region: (user as any).region, addressDescription: (user as any).addressDescription, accessToken } })
 })
 

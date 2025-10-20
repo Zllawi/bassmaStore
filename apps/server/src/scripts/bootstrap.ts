@@ -6,9 +6,11 @@ import { User } from '../modules/auth/model'
 import { Product } from '../modules/products/model'
 
 export async function ensureDevSeedIfEmpty() {
-  // Ensure uploads directory
-  const uploadsDir = path.resolve(process.cwd(), 'uploads')
-  if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true })
+  // Ensure uploads directory only for local storage
+  if (env.UPLOADS_PROVIDER === 'local') {
+    const uploadsDir = path.resolve(process.cwd(), 'uploads')
+    if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true })
+  }
 
   // Only auto-seed in memory vendor to avoid polluting real DBs
   if (env.DB_VENDOR !== 'memory') return
