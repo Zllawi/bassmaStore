@@ -132,13 +132,19 @@ if (clientDistPath) {
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api/')) return next()
     if (req.path.startsWith('/uploads/')) return next()
-    const indexPath = path.join(clientDistPath, 'index.html')
-    res.sendFile(indexPath, err => {
-      if (err) {
-        console.error('[static] Failed to send index.html:', err)
-        next(err)
-      }
-    })
+    // Only serve SPA index for non-asset routes without a file extension
+    const hasExt = path.extname(req.path)
+    const acceptsHtml = (req.headers['accept'] || '').toString().includes('text/html')
+    if (!hasExt && acceptsHtml) {
+      const indexPath = path.join(clientDistPath, 'index.html')
+      return res.sendFile(indexPath, err => {
+        if (err) {
+          console.error('[static] Failed to send index.html:', err)
+          next(err)
+        }
+      })
+    }
+    return next()
   })
 } else {
   // Friendly root route for platform/browser visits when SPA isn't bundled with the API
