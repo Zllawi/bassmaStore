@@ -77,10 +77,20 @@ app.use(cookieParser())
 app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')))
 app.use(rateLimiter)
 
-const clientDistPath = path.resolve(__dirname, '../../client/dist')
-const hasClientBuild = fs.existsSync(clientDistPath)
-if (hasClientBuild) {
+const candidateClientDirs = [
+  path.resolve(__dirname, '../../client/dist'),
+  path.resolve(__dirname, '../client/dist'),
+  path.resolve(process.cwd(), '../client/dist'),
+  path.resolve(process.cwd(), '../../client/dist'),
+  path.resolve(process.cwd(), 'client/dist')
+]
+
+const clientDistPath = candidateClientDirs.find((p) => fs.existsSync(path.join(p, 'index.html')))
+if (clientDistPath) {
+  console.log('[static] Serving client build from:', clientDistPath)
   app.use(express.static(clientDistPath, { index: false }))
+} else {
+  console.warn('[static] client dist not found. Checked:', candidateClientDirs.join(', '))
 }
 
 app.get('/api/v1/health', (_req, res) => res.json({ ok: true }))
@@ -117,11 +127,17 @@ app.use('/api/v1/products', productsRouter)
 app.use('/api/v1/orders', ordersRouter)
 app.use('/api/v1/users', usersRouter)
 
-if (hasClientBuild) {
+if (clientDistPath) {
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api/')) return next()
     if (req.path.startsWith('/uploads/')) return next()
-    res.sendFile(path.join(clientDistPath, 'index.html'))
+    const indexPath = path.join(clientDistPath, 'index.html')
+    res.sendFile(indexPath, err => {
+      if (err) {
+        console.error('[static] Failed to send index.html:', err)
+        next(err)
+      }
+    })
   })
 } else {
   // Friendly root route for platform/browser visits when SPA isn't bundled with the API
