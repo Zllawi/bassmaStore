@@ -23,6 +23,12 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }))
 // CORS: allow configured origin plus common local dev variants
+const configuredOrigins = (env.CORS_ORIGIN || '')
+  .split(',')
+  .map(o => o.trim())
+  .filter(Boolean)
+  .map(o => o.replace(/\/+$/, ''))
+
 app.use(
   cors({
     credentials: true,
@@ -30,18 +36,29 @@ app.use(
       // Allow non-browser or same-origin requests (no Origin header)
       if (!origin) return cb(null, true)
 
-      const allowed = new Set([
-        env.CORS_ORIGIN,
-        'http://localhost:5173',
-        'http://127.0.0.1:5173'
-      ])
-
+      const normalizedOrigin = origin.replace(/\/+$/, '')
       const isDev = env.NODE_ENV !== 'production'
 
-      // Allow exact matches
-      if (allowed.has(origin)) return cb(null, true)
+      if (configuredOrigins.includes(normalizedOrigin)) return cb(null, true)
 
-      // In dev, allow any localhost/127.x port and file:// (Origin "null")
+      if (configuredOrigins.length) {
+        try {
+          const originUrl = new URL(origin)
+          const hostMatch = configuredOrigins.some(cfg => {
+            try {
+              const cfgUrl = new URL(cfg)
+              return cfgUrl.host === originUrl.host
+            } catch {
+              return false
+            }
+          })
+          if (hostMatch) return cb(null, true)
+        } catch {
+          // ignore parsing errors
+        }
+      }
+
+      // Allow localhost variants in dev
       if (
         isDev &&
         (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin) || origin === 'null')

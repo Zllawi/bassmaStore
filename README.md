@@ -92,7 +92,7 @@ Env (see `apps/server/.env.example`):
 - Environment variables:
   - `NODE_ENV=production`
   - `NODE_VERSION=20`
-  - `CORS_ORIGIN=https://your-frontend-domain`
+- `CORS_ORIGIN=https://your-frontend-domain` (comma-separated list allowed, trailing slashes ignored)
   - `DB_VENDOR=mongodb` and `MONGODB_URI=<atlas-connection-string>`
   - `UPLOADS_PROVIDER=cloudinary` plus `CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>` (or the individual keys)
   - `JWT_ACCESS_SECRET` and `JWT_REFRESH_SECRET`
