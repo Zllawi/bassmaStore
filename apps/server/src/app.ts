@@ -59,6 +59,11 @@ app.use(cookieParser())
 app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')))
 app.use(rateLimiter)
 
+// Friendly root route for platform/browser visits
+app.get('/', (_req, res) => {
+  res.type('text/plain').send('API is running. See /api/v1/health')
+})
+
 app.get('/api/v1/health', (_req, res) => res.json({ ok: true }))
 
 // DB health with helpful status/error for quick diagnostics
