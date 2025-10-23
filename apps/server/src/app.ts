@@ -96,6 +96,47 @@ if (clientDistPath) {
 
 app.get('/api/v1/health', (_req, res) => res.json({ ok: true }))
 
+// Uploads/storage health (Cloudinary/S3/local)
+app.get('/api/v1/health/uploads', async (_req, res) => {
+  const info: any = { provider: env.UPLOADS_PROVIDER }
+  try {
+    if (env.UPLOADS_PROVIDER === 'cloudinary') {
+      const { v2: cloudinary } = await import('cloudinary')
+      // Configure from separate vars if CLOUDINARY_URL not provided
+      if (!process.env.CLOUDINARY_URL && env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET) {
+        cloudinary.config({
+          cloud_name: env.CLOUDINARY_CLOUD_NAME,
+          api_key: env.CLOUDINARY_API_KEY,
+          api_secret: env.CLOUDINARY_API_SECRET
+        })
+      }
+      info.vendor = 'cloudinary'
+      try {
+        const r: any = await (cloudinary as any).api.ping()
+        info.ping = r?.status || 'ok'
+      } catch (e: any) {
+        info.ping = 'failed'
+        info.error = e?.message || String(e)
+        return res.status(500).json({ ok: false, uploads: info })
+      }
+      return res.json({ ok: true, uploads: info })
+    }
+    if (env.UPLOADS_PROVIDER === 's3') {
+      info.vendor = 's3-compatible'
+      // We intentionally avoid network calls here; presence of vars is a light-health signal
+      info.bucket = process.env.S3_BUCKET || 'unset'
+      return res.json({ ok: Boolean(process.env.S3_BUCKET), uploads: info })
+    }
+    // local
+    info.vendor = 'local'
+    info.path = 'uploads/'
+    return res.json({ ok: true, uploads: info })
+  } catch (e: any) {
+    info.error = e?.message || String(e)
+    return res.status(500).json({ ok: false, uploads: info })
+  }
+})
+
 // DB health with helpful status/error for quick diagnostics
 app.get('/api/v1/health/db', async (_req, res) => {
   const info: any = { vendor: env.DB_VENDOR, state: 'unknown', fallback: process.env.DB_FALLBACK }

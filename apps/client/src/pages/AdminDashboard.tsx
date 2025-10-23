@@ -8,6 +8,7 @@ import AdminUsers from './admin/AdminUsers'
 export default function AdminDashboard() {
   const { data: stats } = useQuery({ queryKey: ['admin-stats'], queryFn: async () => (await api.get('/orders', { params: { stats: 1 } })).data })
   const { data: dbHealth } = useQuery({ queryKey: ['db-health'], queryFn: async () => (await api.get('/health/db')).data })
+  const { data: uploadsHealth } = useQuery({ queryKey: ['uploads-health'], queryFn: async () => (await api.get('/health/uploads')).data })
   const [tab, setTab] = useState<'products'|'orders'|'users'>('products')
 
   return (
@@ -18,6 +19,21 @@ export default function AdminDashboard() {
         <div className="card p-4"><div className="text-white/60">إجمالي المبيعات</div><div className="text-2xl">{stats?.sales ?? 0}</div></div>
         <div className="card p-4"><div className="text-white/60">أعلى منتج مبيعًا</div><div className="text-2xl">{stats?.top ?? 0}</div></div>
         <div className="card p-4"><div className="text-white/60">عدد الطلبات</div><div className="text-2xl">{stats?.count ?? 0}</div></div>
+      </div>
+
+      <div className="card p-4">
+        <div className="text-white/60">حالة التخزين (الصور)</div>
+        <div className="mt-1">
+          {uploadsHealth?.ok ? (
+            <span className="text-green-400">{uploadsHealth?.uploads?.vendor || uploadsHealth?.uploads?.provider} متصل</span>
+          ) : (
+            <span className="text-red-400">غير متصل</span>
+          )}
+          <span className="text-white/60 ml-2">({uploadsHealth?.uploads?.provider || 'n/a'})</span>
+        </div>
+        {uploadsHealth && !uploadsHealth.ok && uploadsHealth.uploads?.error && (
+          <div className="text-red-400 text-sm mt-1">{String(uploadsHealth.uploads.error)}</div>
+        )}
       </div>
 
       <div className="card p-4">
@@ -45,4 +61,3 @@ export default function AdminDashboard() {
     </div>
   )
 }
-
