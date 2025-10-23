@@ -6,9 +6,9 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "concurrently -c magenta,cyan -n server,client \"npm:dev --workspace @shop/server\" \"npm:dev --workspace @shop/client\"",
-    "build": "npm run build --workspace @shop/server && npm run build --workspace @shop/client",
-    "start": "npm run start --workspace @shop/server",
+    "dev": "concurrently -c magenta,cyan -n server,client \"yarn workspace @shop/server dev\" \"yarn workspace @shop/client dev\"",
+    "build": "yarn workspace @shop/server build && yarn workspace @shop/client build",
+    "start": "yarn workspace @shop/server start",
     "format": "echo 'add a formatter if you like'"
   },
   "devDependencies": {
