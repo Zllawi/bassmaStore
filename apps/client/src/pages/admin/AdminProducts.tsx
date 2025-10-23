@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useMemo, useState } from "react"
 import api from "../../services/api"
 
@@ -8,24 +8,37 @@ type FormState = { name: string; price: string; stock: string; category: string;
 
 type NumericParser = (value: string) => number | null
 
-const digitMap: Record<string, string> = {
-  '٠': '0','١': '1','٢': '2','٣': '3','٤': '4','٥': '5','٦': '6','٧': '7','٨': '8','٩': '9',
-  '0': '0','1': '1','2': '2','3': '3','4': '4','5': '5','6': '6','7': '7','8': '8','9': '9'
+// Parse numbers written with Arabic-Indic or Persian digits and normalize
+const parseNumberInput: NumericParser = (value) => {
+  if (!value) return null
+  const normalized = Array.from(value).map((ch) => {
+    const code = ch.charCodeAt(0)
+    if (code >= 0x0660 && code <= 0x0669) return String(code - 0x0660) // ٠..٩
+    if (code >= 0x06F0 && code <= 0x06F9) return String(code - 0x06F0) // ۰..۹
+    return ch
+  }).join("")
+  const sanitized = normalized.replace(/[^0-9.,-]/g, "").replace(",", ".").trim()
+  if (!sanitized) return null
+  const n = Number(sanitized)
+  return Number.isFinite(n) ? n : null
 }
+
 export default function AdminProducts() {
   const qc = useQueryClient()
   const { data, isLoading } = useQuery({
     queryKey: ["admin-products"],
     queryFn: async () => (await api.get("/products")).data.data as Prod[]
   })
+
   const categories = useMemo(() => [
     { value: "general", label: "عام" },
-    { value: "hair", label: "منتجات الشعر" },
-    { value: "skin", label: "منتجات البشرة" },
+    { value: "hair", label: "العناية بالشعر" },
+    { value: "skin", label: "العناية بالبشرة" },
     { value: "electronics", label: "إلكترونيات" },
     { value: "fashion", label: "أزياء" },
     { value: "home", label: "منزل" }
   ], [])
+
   const initialForm: FormState = { name: "", price: "", stock: "", category: "general", description: "" }
   const [form, setForm] = useState<FormState>(initialForm)
   const [files, setFiles] = useState<FileList | null>(null)
@@ -37,11 +50,9 @@ export default function AdminProducts() {
       const name = form.name.trim()
       const priceValue = parseNumberInput(form.price)
       const stockValue = parseNumberInput(form.stock)
-
       if (!name || priceValue === null || stockValue === null) {
-        throw new Error("الرجاء إدخال الاسم والسعر والمخزون بأرقام صحيحة.")
+        throw new Error("يرجى إدخال اسم/سعر/مخزون صالح.")
       }
-
       const fd = new FormData()
       fd.append("name", name)
       fd.append("price", String(priceValue))
@@ -59,11 +70,8 @@ export default function AdminProducts() {
     onError: (err: any) => {
       const issues = err?.response?.data?.issues as { message?: string }[] | undefined
       const serverMsg = err?.response?.data?.message
-      if (issues?.length) {
-        setError(issues.map((i) => i.message).filter(Boolean).join(" • ") || serverMsg || "تعذّر إنشاء المنتج.")
-      } else {
-        setError(serverMsg || err?.message || "تعذّر إنشاء المنتج.")
-      }
+      if (issues?.length) setError(issues.map(i => i.message).filter(Boolean).join(" • ") || serverMsg || "حدث خطأ")
+      else setError(serverMsg || err?.message || "حدث خطأ")
     }
   })
 
@@ -103,13 +111,13 @@ export default function AdminProducts() {
           <input type="file" multiple onChange={(e) => setFiles(e.target.files)} className="sm:col-span-2" />
         </div>
         <div className="mt-3">
-          <button className="btn" onClick={() => createMut.mutate()} disabled={createMut.isPending}>حفظ المنتج</button>
+          <button className="btn" onClick={() => createMut.mutate()} disabled={createMut.isPending}>إضافة المنتج</button>
         </div>
       </div>
 
       <div className="card p-4">
         <h3 className="font-medium mb-3">قائمة المنتجات</h3>
-        {isLoading ? 'جار التحميل...' : (
+        {isLoading ? 'جاري التحميل...' : (
           <div className="overflow-auto">
             <table className="w-full text-sm">
               <thead className="text-white/60">
@@ -123,7 +131,7 @@ export default function AdminProducts() {
                 </tr>
               </thead>
               <tbody>
-                {data?.map((p) => (
+                {(data || []).map((p) => (
                   <Row key={p._id} p={p} parseNumber={parseNumberInput} onUpdate={(patch, images, replace) => updateMut.mutate({ id: p._id, patch, images, replace })} onDelete={() => delMut.mutate(p._id)} />
                 ))}
               </tbody>
@@ -155,7 +163,7 @@ function Row({ p, parseNumber, onUpdate, onDelete }: RowProps) {
     const priceValue = parseNumber(price)
     const stockValue = parseNumber(stock)
     if (!name.trim() || priceValue === null || stockValue === null) {
-      setRowError("يرجى إدخال اسم وسعر ومخزون صالحين.")
+      setRowError("يرجى إدخال اسم/سعر/مخزون صالح.")
       return
     }
     setRowError(null)
@@ -199,7 +207,4 @@ function Row({ p, parseNumber, onUpdate, onDelete }: RowProps) {
     </tr>
   )
 }
-
-
-
 
