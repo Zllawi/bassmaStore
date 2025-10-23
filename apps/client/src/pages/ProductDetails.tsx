@@ -23,7 +23,7 @@ export default function ProductDetails() {
       <div className="space-y-4">
         <h1 className="text-3xl font-bold text-white">{product.name}</h1>
         <p className="text-accent text-2xl">{formatCurrency(product.price)}</p>
-        <p className="text-white/70">{product.description || 'وصف المنتج غير متوفر حالياً.'}</p>
+        <p className="text-white/70">{product.description || 'لا يتوفر وصف لهذا المنتج.'}</p>
         <button
           className="btn"
           onClick={() => addItem({ id: product._id, name: product.name, price: product.price, image: product.images?.[0] })}
@@ -34,5 +34,7 @@ export default function ProductDetails() {
     </div>
   )
 }
+
+
 
 

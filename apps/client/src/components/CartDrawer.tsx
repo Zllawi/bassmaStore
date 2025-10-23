@@ -35,7 +35,7 @@ export default function CartDrawer() {
                 type="button"
                 className="btn-icon h-10 w-10"
                 onClick={toggleDrawer}
-                aria-label="إغلاق السلة"
+                aria-label="سلة المشتريات"
               >
                 X
               </button>
@@ -56,7 +56,7 @@ export default function CartDrawer() {
                       <button
                         className="btn-ghost h-10 w-10"
                         onClick={() => dec(item.id)}
-                        aria-label="تقليل الكمية"
+                        aria-label="سلة المشتريات"
                       >
                         -
                       </button>
@@ -66,7 +66,7 @@ export default function CartDrawer() {
                       <button
                         className="btn-ghost h-10 w-10"
                         onClick={() => inc(item.id)}
-                        aria-label="زيادة الكمية"
+                        aria-label="سلة المشتريات"
                       >
                         +
                       </button>
@@ -74,7 +74,7 @@ export default function CartDrawer() {
                     <button
                       className="btn-ghost bg-red-500/80 text-light hover:bg-red-500/90"
                       onClick={() => remove(item.id)}
-                      aria-label="إزالة المنتج"
+                      aria-label="سلة المشتريات"
                     >
                       حذف
                     </button>
@@ -102,5 +102,7 @@ export default function CartDrawer() {
     </AnimatePresence>
   )
 }
+
+
 
 

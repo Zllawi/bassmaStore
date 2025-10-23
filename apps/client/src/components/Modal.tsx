@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+ï»¿import type { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 type ModalProps = {
@@ -8,7 +8,7 @@ type ModalProps = {
   ariaLabel?: string
 }
 
-export default function Modal({ open, onClose, children, ariaLabel = 'äÇÝÐÉ ÍæÇÑ' }: ModalProps) {
+export default function Modal({ open, onClose, children, ariaLabel = 'Ù…Ø±Ø¨Ø¹ Ø­ÙˆØ§Ø±' }: ModalProps) {
   return (
     <AnimatePresence>
       {open && (
@@ -30,7 +30,7 @@ export default function Modal({ open, onClose, children, ariaLabel = 'äÇÝÐÉ ÍæÇÑ
               <button
                 type="button"
                 className="btn-icon absolute right-4 top-4 h-10 w-10"
-                aria-label="ÅÛáÇÞ ÇáäÇÝÐÉ"
+                aria-label="Ù…Ø±Ø¨Ø¹ Ø­ÙˆØ§Ø±"
                 onClick={onClose}
               >
                 X
@@ -43,4 +43,6 @@ export default function Modal({ open, onClose, children, ariaLabel = 'äÇÝÐÉ ÍæÇÑ
     </AnimatePresence>
   )
 }
+
+
 

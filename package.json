@@ -6,9 +6,11 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "concurrently -c magenta,cyan -n server,client \"yarn workspace @shop/server dev\" \"yarn workspace @shop/client dev\"",
+    "dev": "concurrently -c magenta,cyan -n server,client \"npm run -w @shop/server dev\" \"npm run -w @shop/client dev\"",
     "build": "yarn install --production=false && yarn workspace @shop/server build && yarn workspace @shop/client build",
-    "start": "yarn workspace @shop/server start",
+    "start": "npm run -w @shop/server start",
+    "dev:server": "npm run -w @shop/server dev",
+    "dev:client": "npm run -w @shop/client dev",
     "format": "echo 'add a formatter if you like'"
   },
   "devDependencies": {

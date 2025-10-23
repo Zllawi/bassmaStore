@@ -18,9 +18,9 @@ export default function ProductCard({ product, onQuick }: { product: Product; on
     <motion.div
       layout
       className="card flex h-full flex-col gap-4 p-4 sm:p-5"
-      aria-label={`بطاقة ${product.name}`}
+      aria-label="بطاقة منتج"
     >
-      <Link to={`/product/${product._id}`} aria-label={`عرض ${product.name}`} className="block overflow-hidden rounded-xl">
+      <Link to={`/product/${product._id}`} aria-label="تفاصيل المنتج" className="block overflow-hidden rounded-xl">
         <img
           src={product.images?.[0] || "/placeholder.svg"}
           alt={product.name}
@@ -52,5 +52,9 @@ export default function ProductCard({ product, onQuick }: { product: Product; on
     </motion.div>
   )
 }
+
+
+
+
 
 

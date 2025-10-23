@@ -1,4 +1,4 @@
-import { Suspense, lazy, type ReactNode } from "react"
+ï»¿import { Suspense, lazy, type ReactNode } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
@@ -33,7 +33,7 @@ export default function AppRoutes() {
       <Header />
       <CartDrawer />
       <main className="container mx-auto flex-1 px-4 py-6">
-        <Suspense fallback={<div role="status" aria-live="polite">ÌÇÑí ÊÍãíá ÇáãÍÊæì...</div>}>
+        <Suspense fallback={<div role="status" aria-live="polite">Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ù…Ø­ØªÙˆÙ‰...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
@@ -51,3 +51,5 @@ export default function AppRoutes() {
     </div>
   )
 }
+
+

@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react'
+ï»¿import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../services/api'
@@ -21,7 +21,7 @@ export default function Register() {
       localStorage.setItem('auth', JSON.stringify(res.data.data))
       navigate('/')
     } catch (err: any) {
-      setError(err?.response?.data?.message || 'ÊÚĞøÑ ÅäÔÇÁ ÇáÍÓÇÈ¡ íÑÌì ÇáÊÍŞŞ ãä ÇáÈíÇäÇÊ æÇáãÍÇæáÉ ãä ÌÏíÏ.')
+      setError(err?.response?.data?.message || 'Ø­Ø¯Ø« Ø®Ø·Ø£ Ø£Ø«Ù†Ø§Ø¡ Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ø­Ø³Ø§Ø¨. ØªØ£ÙƒØ¯ Ù…Ù† Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª ÙˆØ­Ø§ÙˆÙ„ Ù…Ø¬Ø¯Ø¯Ù‹Ø§.')
     }
   }
 
@@ -29,29 +29,31 @@ export default function Register() {
     <section className="mx-auto max-w-xl space-y-6">
       <div className="card space-y-5 p-6">
         <header className="space-y-1">
-          <h1 className="text-2xl font-semibold text-white">ÅäÔÇÁ ÍÓÇÈ ÌÏíÏ</h1>
-          <p className="text-sm text-white/60">ÓÌøá áÊÊÇÈÚ ØáÈÇÊß æÊÍİÙ ÚäÇæíäß æÊõßãá ÇáÔÑÇÁ ÈÓÑÚÉ.</p>
+          <h1 className="text-2xl font-semibold text-white">Ø¥Ù†Ø´Ø§Ø¡ Ø­Ø³Ø§Ø¨ Ø¬Ø¯ÙŠØ¯</h1>
+          <p className="text-sm text-white/60">Ø³Ø¬Ù‘Ù„ Ù„ØªØªØ§Ø¨Ø¹ Ø·Ù„Ø¨Ø§ØªÙƒ ÙˆØªØ­ÙØ¸ Ø¹Ù†Ø§ÙˆÙŠÙ†Ùƒ ÙˆØªÙÙƒÙ…Ù„ Ø§Ù„Ø´Ø±Ø§Ø¡ Ø¨Ø³Ø±Ø¹Ø©.</p>
         </header>
 
         {error && <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">{error}</div>}
 
         <form className="grid grid-cols-1 gap-3 sm:grid-cols-2" onSubmit={onSubmit}>
-          <input className="input" placeholder="ÇáÇÓã ÇáßÇãá" value={name} onChange={e => setName(e.target.value)} required />
-          <input className="input" placeholder="ÇáÈÑíÏ ÇáÅáßÊÑæäí" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-          <input className="input" placeholder="ßáãÉ ÇáãÑæÑ" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-          <input className="input" placeholder="ÑŞã ÇáÌæÇá" value={phone} onChange={e => setPhone(e.target.value)} required />
-          <input className="input" placeholder="ÇáãÏíäÉ" value={city} onChange={e => setCity(e.target.value)} required />
-          <input className="input" placeholder="ÇáÍí / ÇáãäØŞÉ" value={region} onChange={e => setRegion(e.target.value)} required />
-          <textarea className="input sm:col-span-2" placeholder="ÊİÇÕíá ÇáÚäæÇä" rows={3} value={addressDescription} onChange={e => setAddressDescription(e.target.value)} required />
-          <button className="btn sm:col-span-2" type="submit">ÅäÔÇÁ ÇáÍÓÇÈ</button>
+          <input className="input" placeholder="Ø§Ù„Ø§Ø³Ù… Ø§Ù„ÙƒØ§Ù…Ù„" value={name} onChange={e => setName(e.target.value)} required />
+          <input className="input" placeholder="Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+          <input className="input" placeholder="ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <input className="input" placeholder="Ø±Ù‚Ù… Ø§Ù„Ø¬ÙˆØ§Ù„" value={phone} onChange={e => setPhone(e.target.value)} required />
+          <input className="input" placeholder="Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©" value={city} onChange={e => setCity(e.target.value)} required />
+          <input className="input" placeholder="Ø§Ù„Ø­ÙŠ / Ø§Ù„Ù…Ù†Ø·Ù‚Ø©" value={region} onChange={e => setRegion(e.target.value)} required />
+          <textarea className="input sm:col-span-2" placeholder="ØªÙØ§ØµÙŠÙ„ Ø§Ù„Ø¹Ù†ÙˆØ§Ù†" rows={3} value={addressDescription} onChange={e => setAddressDescription(e.target.value)} required />
+          <button className="btn sm:col-span-2" type="submit">Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ø­Ø³Ø§Ø¨</button>
         </form>
       </div>
 
       <p className="text-center text-sm text-white/70">
-        áÏíß ÍÓÇÈ ãÓÈŞÇğ¿{' '}
-        <Link to="/login" className="text-accent hover:underline">ÓÌøá ÇáÏÎæá ÇáÂä</Link>
+        Ù„Ø¯ÙŠÙƒ Ø­Ø³Ø§Ø¨ Ù…Ø³Ø¨Ù‚Ø§Ù‹ØŸ{' '}
+        <Link to="/login" className="text-accent hover:underline">Ø³Ø¬Ù‘Ù„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ø§Ù„Ø¢Ù†</Link>
       </p>
     </section>
   )
 }
+
+
 

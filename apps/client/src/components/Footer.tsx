@@ -8,8 +8,10 @@
           <a href="#" className="hover:text-accent">سياسة الخصوصية</a>
           <a href="#" className="hover:text-accent">الشروط والأحكام</a>
         </nav>
-        <p>{'\u00A9'} {new Date().getFullYear()} {brand} - جميع الحقوق محفوظة.</p>
+        <p>{'©'} {new Date().getFullYear()} {brand} - جميع الحقوق محفوظة.</p>
       </div>
     </footer>
   )
 }
+
+

@@ -16,7 +16,7 @@ export default function Home() {
 
   const brandName = (import.meta as any).env?.VITE_BRAND_NAME as string | undefined
   useEffect(() => {
-    document.title = brandName || "متجر الأفق"
+    document.title = brandName || "متجر بسمة"
   }, [brandName])
 
   const products = useMemo<Product[]>(() => data?.data || [], [data])
@@ -53,7 +53,7 @@ export default function Home() {
         )}
       </section>
 
-      <Modal open={!!quick} onClose={() => setQuick(null)} ariaLabel="معاينة المنتج">
+      <Modal open={!!quick} onClose={() => setQuick(null)} ariaLabel="نظرة سريعة على المنتج">
         {quick && (
           <div className="flex flex-col gap-4 sm:flex-row">
             <img src={quick.images?.[0] || "/placeholder.svg"} alt={quick.name} className="h-40 w-40 rounded-xl object-cover sm:h-48 sm:w-48" />
@@ -68,5 +68,8 @@ export default function Home() {
     </div>
   )
 }
+
+
+
 
 

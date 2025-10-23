@@ -10,24 +10,8 @@ type NumericParser = (value: string) => number | null
 
 const digitMap: Record<string, string> = {
   '٠': '0','١': '1','٢': '2','٣': '3','٤': '4','٥': '5','٦': '6','٧': '7','٨': '8','٩': '9',
-  '۰': '0','۱': '1','۲': '2','۳': '3','۴': '4','۵': '5','۶': '6','۷': '7','۸': '8','۹': '9'
+  '0': '0','1': '1','2': '2','3': '3','4': '4','5': '5','6': '6','7': '7','8': '8','9': '9'
 }
-
-const parseNumberInput: NumericParser = (value) => {
-  if (!value) return null
-  const normalizedDigits = value
-    .split('')
-    .map((ch) => digitMap[ch] ?? ch)
-    .join('')
-  const sanitized = normalizedDigits
-    .replace(/[^0-9.,-]/g, '')
-    .replace(',', '.')
-    .trim()
-  if (!sanitized) return null
-  const parsed = Number(sanitized)
-  return Number.isFinite(parsed) ? parsed : null
-}
-
 export default function AdminProducts() {
   const qc = useQueryClient()
   const { data, isLoading } = useQuery({
@@ -215,3 +199,7 @@ function Row({ p, parseNumber, onUpdate, onDelete }: RowProps) {
     </tr>
   )
 }
+
+
+
+

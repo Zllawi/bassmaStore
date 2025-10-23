@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react'
+ï»¿import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../services/api'
@@ -16,7 +16,7 @@ export default function Login() {
       localStorage.setItem('auth', JSON.stringify(res.data.data))
       navigate('/')
     } catch (err: any) {
-      setError(err?.response?.data?.message || 'ÊÚĞøÑ ÊÓÌíá ÇáÏÎæá¡ íÑÌì ÇáÊÍŞŞ ãä ÇáÈíÇäÇÊ æÇáãÍÇæáÉ ãÑÉ ÃÎÑì.')
+      setError(err?.response?.data?.message || 'Ø­Ø¯Ø« Ø®Ø·Ø£ Ø£Ø«Ù†Ø§Ø¡ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„. ØªØ£ÙƒØ¯ Ù…Ù† Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª ÙˆØ­Ø§ÙˆÙ„ Ù…Ø¬Ø¯Ø¯Ù‹Ø§.')
     }
   }
 
@@ -24,8 +24,8 @@ export default function Login() {
     <section className="mx-auto max-w-md space-y-6">
       <div className="card space-y-5 p-6">
         <header className="space-y-1">
-          <h1 className="text-2xl font-semibold text-white">ÊÓÌíá ÇáÏÎæá Åáì ÍÓÇÈß</h1>
-          <p className="text-sm text-white/60">ÊÇÈÚ ØáÈÇÊß æÇÍİÙ ÚäÇæíäß æÊãÊÚ ÈÊÌÑÈÉ ÊÓæŞ ÃÓåá.</p>
+          <h1 className="text-2xl font-semibold text-white">ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ø¥Ù„Ù‰ Ø­Ø³Ø§Ø¨Ùƒ</h1>
+          <p className="text-sm text-white/60">ØªØ§Ø¨Ø¹ Ø·Ù„Ø¨Ø§ØªÙƒ ÙˆØ§Ø­ÙØ¸ Ø¹Ù†Ø§ÙˆÙŠÙ†Ùƒ ÙˆØªÙ…ØªØ¹ Ø¨ØªØ¬Ø±Ø¨Ø© ØªØ³ÙˆÙ‚ Ø£Ø³Ù‡Ù„.</p>
         </header>
 
         {error && <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">{error}</div>}
@@ -33,7 +33,7 @@ export default function Login() {
         <form className="space-y-3" onSubmit={onSubmit}>
           <input
             className="input"
-            placeholder="ÇáÈÑíÏ ÇáÅáßÊÑæäí"
+            placeholder="Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ"
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -41,21 +41,23 @@ export default function Login() {
           />
           <input
             className="input"
-            placeholder="ßáãÉ ÇáãÑæÑ"
+            placeholder="ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±"
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
           />
-          <button className="btn w-full" type="submit">ÊÓÌíá ÇáÏÎæá</button>
+          <button className="btn w-full" type="submit">ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„</button>
         </form>
       </div>
 
       <p className="text-center text-sm text-white/70">
-        ãÓÊÎÏã ÌÏíÏ¿{' '}
-        <Link to="/register" className="text-accent hover:underline">ÃäÔÆ ÍÓÇÈß ÇáÂä</Link>
+        Ù…Ø³ØªØ®Ø¯Ù… Ø¬Ø¯ÙŠØ¯ØŸ{' '}
+        <Link to="/register" className="text-accent hover:underline">Ø£Ù†Ø´Ø¦ Ø­Ø³Ø§Ø¨Ùƒ Ø§Ù„Ø¢Ù†</Link>
       </p>
     </section>
   )
 }
+
+
 
