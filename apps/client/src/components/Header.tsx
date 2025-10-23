@@ -1,4 +1,4 @@
-ï»¿import { FormEvent, useEffect, useRef, useState } from "react"
+import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react"
 import { Link, createSearchParams, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import { useCart } from "../features/cart/useCart"
@@ -51,8 +51,8 @@ function MoonIcon({ className }: IconProps) {
 }
 
 const categories = [
-  { label: "Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø´Ø¹Ø±", value: "hair" },
-  { label: "Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø¨Ø´Ø±Ø©", value: "skin" }
+  { label: "ãäÊÌÇÊ ÇáÔÚÑ", value: "hair" },
+  { label: "ãäÊÌÇÊ ÇáÈÔÑÉ", value: "skin" }
 ]
 
 export default function Header() {
@@ -108,7 +108,7 @@ export default function Header() {
 
   const toggleTheme = () => setTheme(prev => (prev === "dark" ? "light" : "dark"))
 
-  const handleSearchButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSearchButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (!searchOpen) {
       e.preventDefault()
       setSearchOpen(true)
@@ -143,7 +143,7 @@ export default function Header() {
             marginInlineStart: searchOpen ? "0.75rem" : "0",
             pointerEvents: searchOpen ? "auto" : "none"
           }}
-          placeholder="Ø§Ø¨Ø­Ø« Ø¹Ù† Ù…Ù†ØªØ¬ Ø£Ùˆ ÙØ¦Ø©"
+          placeholder="ÇÈÍË Úä ãäÊÌ Ãæ İÆÉ"
           value={query}
           onChange={e => setQuery(e.target.value)}
           aria-hidden={!searchOpen}
@@ -152,7 +152,7 @@ export default function Header() {
         <button
           type="submit"
           className={`absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-xl transition-colors ${searchOpen ? "bg-accent/20 text-accent" : "text-white/70 hover:text-accent"}`}
-          aria-label="ØªÙ†ÙÙŠØ° Ø§Ù„Ø¨Ø­Ø«"
+          aria-label="ÊäİíĞ ÇáÈÍË"
           onClick={handleSearchButtonClick}
         >
           <SearchIcon className="h-5 w-5" />
@@ -163,7 +163,7 @@ export default function Header() {
 
   const logo = (import.meta as any).env?.VITE_BRAND_LOGO as string | undefined
   const brandName = (import.meta as any).env?.VITE_BRAND_NAME as string | undefined
-  const brandLabel = brandName || "Ù…ØªØ¬Ø± Ø§Ù„Ø£ÙÙ‚"
+  const brandLabel = brandName || "ãÊÌÑ ÇáÃİŞ"
   const logoSrc = logo || "/logo.png"
 
   return (
@@ -171,10 +171,10 @@ export default function Header() {
       <div className="container mx-auto flex flex-wrap items-center gap-3 px-4 py-4 md:flex-nowrap">
         <div className="flex w-full items-center gap-3">
           <div className="flex items-center gap-3 md:w-auto">
-            <button type="button" className="btn-icon md:hidden" onClick={() => setMenuOpen(true)} aria-label="ÙØªØ­ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø¬Ø§Ù†Ø¨ÙŠØ©">
+            <button type="button" className="btn-icon md:hidden" onClick={() => setMenuOpen(true)} aria-label="İÊÍ ÇáŞÇÆãÉ ÇáÌÇäÈíÉ">
               <MenuIcon className="h-5 w-5" />
             </button>
-            <Link to="/" className="flex items-center gap-3" aria-label="Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©">
+            <Link to="/" className="flex items-center gap-3" aria-label="ÇáÚæÏÉ ááÕİÍÉ ÇáÑÆíÓíÉ">
               <img src={logoSrc} alt={brandLabel} className="h-11 w-auto rounded-xl border border-white/10 bg-white/10 p-2" />
               <span className="whitespace-nowrap text-base font-semibold text-white sm:text-lg">{brandLabel}</span>
             </Link>
@@ -182,7 +182,7 @@ export default function Header() {
 
           <div className="ml-auto flex items-center gap-2 md:hidden">
             {renderSearchForm("mobile")}
-            <button type="button" className="btn-icon" onClick={toggleDrawer} aria-label="ÙØªØ­ Ø³Ù„Ø© Ø§Ù„Ù…Ø´ØªØ±ÙŠØ§Øª">
+            <button type="button" className="btn-icon" onClick={toggleDrawer} aria-label="İÊÍ ÓáÉ ÇáãÔÊÑíÇÊ">
               <CartIcon className="h-5 w-5" />
               {totalQty > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-semibold text-dark2">
@@ -190,13 +190,13 @@ export default function Header() {
                 </span>
               )}
             </button>
-            <button type="button" className="btn-icon" aria-label="ØªØ¨Ø¯ÙŠÙ„ Ù†Ù…Ø· Ø§Ù„ÙˆØ§Ø¬Ù‡Ø©" onClick={toggleTheme}>
+            <button type="button" className="btn-icon" aria-label="ÊÈÏíá äãØ ÇáæÇÌåÉ" onClick={toggleTheme}>
               {theme === "dark" ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
-        <nav className="hidden w-auto gap-6 text-sm font-medium text-white md:flex" aria-label="Ø±ÙˆØ§Ø¨Ø· Ø§Ù„Ø£Ù‚Ø³Ø§Ù…">
+        <nav className="hidden w-auto gap-6 text-sm font-medium text-white md:flex" aria-label="ÑæÇÈØ ÇáÃŞÓÇã">
           {categories.map(cat => (
             <Link
               key={cat.value}
@@ -208,14 +208,14 @@ export default function Header() {
           ))}
           {isAdmin && (
             <Link to="/admin" className="whitespace-nowrap rounded-xl bg-white/10 px-3 py-2 text-light transition hover:bg-white/15">
-              Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…
+              áæÍÉ ÇáÊÍßã
             </Link>
           )}
         </nav>
 
         <div className="order-last hidden items-center gap-2 md:order-none md:flex">
           {renderSearchForm("desktop")}
-          <button type="button" className="btn-icon" aria-label="ØªØ¨Ø¯ÙŠÙ„ Ù†Ù…Ø· Ø§Ù„ÙˆØ§Ø¬Ù‡Ø©" onClick={toggleTheme}>
+          <button type="button" className="btn-icon" aria-label="ÊÈÏíá äãØ ÇáæÇÌåÉ" onClick={toggleTheme}>
             {theme === "dark" ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
           </button>
         </div>
@@ -223,20 +223,20 @@ export default function Header() {
         <div className="hidden items-center gap-2 md:flex">
           {user ? (
             <button type="button" className="btn whitespace-nowrap bg-white/10 px-5 text-sm text-light" onClick={onLogout}>
-              ØªØ³Ø¬ÙŠÙ„ Ø®Ø±ÙˆØ¬
+              ÊÓÌíá ÎÑæÌ
             </button>
           ) : (
             <>
               <Link to="/login" className="btn whitespace-nowrap bg-white/10 px-5 text-sm text-light">
-                ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„
+                ÊÓÌíá ÇáÏÎæá
               </Link>
               <Link to="/register" className="btn whitespace-nowrap px-5 text-sm">
-                Ø¥Ù†Ø´Ø§Ø¡ Ø­Ø³Ø§Ø¨
+                ÅäÔÇÁ ÍÓÇÈ
               </Link>
             </>
           )}
 
-          <button type="button" className="btn-icon" onClick={toggleDrawer} aria-label="ÙØªØ­ Ø³Ù„Ø© Ø§Ù„Ù…Ø´ØªØ±ÙŠØ§Øª">
+          <button type="button" className="btn-icon" onClick={toggleDrawer} aria-label="İÊÍ ÓáÉ ÇáãÔÊÑíÇÊ">
             <CartIcon className="h-5 w-5" />
             {totalQty > 0 && (
               <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-semibold text-dark2">
@@ -251,3 +251,4 @@ export default function Header() {
     </header>
   )
 }
+
