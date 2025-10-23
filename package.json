@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "concurrently -c magenta,cyan -n server,client \"yarn workspace @shop/server dev\" \"yarn workspace @shop/client dev\"",
-    "build": "yarn workspace @shop/server build && yarn workspace @shop/client build",
+    "build": "yarn install --production=false && yarn workspace @shop/server build && yarn workspace @shop/client build",
     "start": "yarn workspace @shop/server start",
     "format": "echo 'add a formatter if you like'"
   },
