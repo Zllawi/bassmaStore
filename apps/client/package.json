@@ -5,7 +5,7 @@
     "type":  "module",
     "scripts":  {
                     "dev":  "vite",
-                    "build":  "tsc -b && vite build",
+                    "build": "vite build",
                     "preview":  "vite preview --port 5173"
                 },
     "dependencies":  {
@@ -27,3 +27,4 @@
                             "typescript":  "^5.6.3"
                         }
 }
+
