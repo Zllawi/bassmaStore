@@ -1,4 +1,4 @@
-﻿import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '../../services/api'
 
 type User = { _id: string; name: string; email: string; role: string; phone?: string; city?: string; region?: string; createdAt?: string }
@@ -17,7 +17,7 @@ export default function AdminUsers() {
 
   const onDelete = (u: User) => {
     if (u.role === 'admin') {
-      alert('ظ„ط§ ظٹظ…ظƒظ† ط­ط°ظپ ط­ط³ط§ط¨ ظ…ط´ط±ظپ (admin).')
+      alert('لا يمكن حذف مستخدم بدور مدير (admin).')
       return
     }
     if (confirm(`هل أنت متأكد من حذف هذا المستخدم: ${u.name} (${u.email})؟`)) {
@@ -27,22 +27,22 @@ export default function AdminUsers() {
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xl font-semibold">ط§ظ„ظ…ط³طھط®ط¯ظ…ظˆظ†</h2>
+      <h2 className="text-xl font-semibold">المستخدمون</h2>
       <div className="card p-4">
-        {isLoading ? 'ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...' : error ? 'ظپط´ظ„ ط§ظ„طھط­ظ…ظٹظ„' : (
+        {isLoading ? 'جاري تحميل المستخدمين...' : error ? 'حدث خطأ أثناء الجلب' : (
           <div className="overflow-auto">
             <table className="w-full text-sm">
               <thead className="text-white/60">
                 <tr>
                   <th className="text-right p-2">#</th>
-                  <th className="text-right p-2">ط§ظ„ط§ط³ظ…</th>
-                  <th className="text-right p-2">ط§ظ„ط¨ط±ظٹط¯</th>
-                  <th className="text-right p-2">ط§ظ„ط¯ظˆط±</th>
-                  <th className="text-right p-2">ط§ظ„ظ‡ط§طھظپ</th>
-                  <th className="text-right p-2">ط§ظ„ظ…ط¯ظٹظ†ط©</th>
-                  <th className="text-right p-2">ط§ظ„ظ…ظ†ط·ظ‚ط©</th>
-                  <th className="text-right p-2">ط¥ظ†ط´ط§ط،</th>
-                  <th className="text-right p-2">ط¥ط¬ط±ط§ط،ط§طھ</th>
+                  <th className="text-right p-2">الاسم</th>
+                  <th className="text-right p-2">البريد الإلكتروني</th>
+                  <th className="text-right p-2">الدور</th>
+                  <th className="text-right p-2">الهاتف</th>
+                  <th className="text-right p-2">المدينة</th>
+                  <th className="text-right p-2">المنطقة</th>
+                  <th className="text-right p-2">أُنشئ في</th>
+                  <th className="text-right p-2">إجراءات</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,9 +55,9 @@ export default function AdminUsers() {
                     <td className="p-2">{u.phone || '-'}</td>
                     <td className="p-2">{u.city || '-'}</td>
                     <td className="p-2">{u.region || '-'}</td>
-                    <td className="p-2">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</td>
+                    <td className="p-2">{u.createdAt ? new Date(u.createdAt).toLocaleDateString('ar-SA') : '-'}</td>
                     <td className="p-2">
-                      <button className="btn bg-red-500/80" onClick={() => onDelete(u)} disabled={delMut.isPending}>ط­ط°ظپ</button>
+                      <button className="btn bg-red-500/80" onClick={() => onDelete(u)} disabled={delMut.isPending}>حذف</button>
                     </td>
                   </tr>
                 ))}
@@ -69,6 +69,4 @@ export default function AdminUsers() {
     </section>
   )
 }
-
-
 
