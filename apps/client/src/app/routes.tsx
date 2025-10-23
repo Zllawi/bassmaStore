@@ -1,4 +1,4 @@
-ï»¿import React, { Suspense, lazy } from "react"
+import { Suspense, lazy, type ReactNode } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
@@ -13,14 +13,14 @@ const Checkout = lazy(() => import("../pages/Checkout"))
 const MyOrders = lazy(() => import("../pages/MyOrders"))
 const AccountSettings = lazy(() => import("../pages/AccountSettings"))
 
-function AdminRoute({ children }: { children: React.ReactNode }) {
+function AdminRoute({ children }: { children: ReactNode }) {
   const auth = localStorage.getItem("auth")
   const user = auth ? JSON.parse(auth) : null
   if (!user?.accessToken || user?.role !== "admin") return <Navigate to="/login" replace />
   return <>{children}</>
 }
 
-function UserRoute({ children }: { children: React.ReactNode }) {
+function UserRoute({ children }: { children: ReactNode }) {
   const auth = localStorage.getItem("auth")
   const user = auth ? JSON.parse(auth) : null
   if (!user?.accessToken) return <Navigate to="/login" replace />
@@ -33,7 +33,7 @@ export default function AppRoutes() {
       <Header />
       <CartDrawer />
       <main className="container mx-auto flex-1 px-4 py-6">
-        <Suspense fallback={<div role="status" aria-live="polite">Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ù…Ø­ØªÙˆÙ‰...</div>}>
+        <Suspense fallback={<div role="status" aria-live="polite">ÌÇÑí ÊÍãíá ÇáãÍÊæì...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
