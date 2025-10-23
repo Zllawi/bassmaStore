@@ -23,7 +23,14 @@ export const list = asyncHandler(async (req: Request, res: Response) => {
   const serialize = (p: any) => {
     const obj = (typeof p?.toObject === 'function') ? p.toObject() : p
     if (Array.isArray(obj.images)) {
-      obj.images = obj.images.map((u: string) => (typeof u === 'string' && u.startsWith('/uploads/')) ? `${base}${u}` : u)
+      obj.images = obj.images.map((u: string) => {
+        if (typeof u !== 'string') return u as any
+        if (u.startsWith('/uploads/')) return `${base}${u}`
+        // Normalize any absolute URL that points to a previous host but same /uploads path
+        const m = u.match(/^https?:\/\/[^/]+(\/uploads\/.*)$/i)
+        if (m) return `${base}${m[1]}`
+        return u
+      })
     }
     return obj
   }
@@ -36,7 +43,13 @@ export const getOne = asyncHandler(async (req: Request, res: Response) => {
   const base = `${req.protocol}://${req.get('host')}`
   const obj = (typeof (data as any)?.toObject === 'function') ? (data as any).toObject() : data
   if (Array.isArray((obj as any).images)) {
-    (obj as any).images = (obj as any).images.map((u: string) => (typeof u === 'string' && u.startsWith('/uploads/')) ? `${base}${u}` : u)
+    (obj as any).images = (obj as any).images.map((u: string) => {
+      if (typeof u !== 'string') return u as any
+      if (u.startsWith('/uploads/')) return `${base}${u}`
+      const m = u.match(/^https?:\/\/[^/]+(\/uploads\/.*)$/i)
+      if (m) return `${base}${m[1]}`
+      return u
+    })
   }
   res.json({ data: obj })
 })
@@ -67,7 +80,13 @@ export const create = [requireRole('admin'), asyncHandler(async (req: Request, r
   const base = `${req.protocol}://${req.get('host')}`
   const obj = (typeof (data as any)?.toObject === 'function') ? (data as any).toObject() : data
   if (Array.isArray((obj as any).images)) {
-    (obj as any).images = (obj as any).images.map((u: string) => (typeof u === 'string' && u.startsWith('/uploads/')) ? `${base}${u}` : u)
+    (obj as any).images = (obj as any).images.map((u: string) => {
+      if (typeof u !== 'string') return u as any
+      if (u.startsWith('/uploads/')) return `${base}${u}`
+      const m = u.match(/^https?:\/\/[^/]+(\/uploads\/.*)$/i)
+      if (m) return `${base}${m[1]}`
+      return u
+    })
   }
   res.status(201).json({ data: obj })
 })]
@@ -107,7 +126,13 @@ export const update = [requireRole('admin'), asyncHandler(async (req: Request, r
   const base = `${req.protocol}://${req.get('host')}`
   const obj = (typeof (data as any)?.toObject === 'function') ? (data as any).toObject() : data
   if (Array.isArray((obj as any).images)) {
-    (obj as any).images = (obj as any).images.map((u: string) => (typeof u === 'string' && u.startsWith('/uploads/')) ? `${base}${u}` : u)
+    (obj as any).images = (obj as any).images.map((u: string) => {
+      if (typeof u !== 'string') return u as any
+      if (u.startsWith('/uploads/')) return `${base}${u}`
+      const m = u.match(/^https?:\/\/[^/]+(\/uploads\/.*)$/i)
+      if (m) return `${base}${m[1]}`
+      return u
+    })
   }
   res.json({ data: obj })
 })]
