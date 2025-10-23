@@ -14,12 +14,7 @@
                             "skipLibCheck":  true,
                             "noEmit":  true,
                             "module":  "ESNext",
-                            "useDefineForClassFields":  true,
-                            "types":  [
-                                          "vite/client",
-                                          "react",
-                                          "react-dom"
-                                      ]
+                            "useDefineForClassFields":  true
                         },
     "include":  [
                     "src"
