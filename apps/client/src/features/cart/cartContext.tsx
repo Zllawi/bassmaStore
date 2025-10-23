@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 
 export type CartItem = { id: string; name: string; price: number; qty: number; image?: string }
 type CartState = { items: CartItem[]; drawerOpen: boolean }
@@ -19,7 +19,7 @@ const KEY = 'cart-state'
 
 const CartContext = createContext<CartCtx | null>(null)
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
+export function CartProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<CartState>(() => {
     const raw = localStorage.getItem(KEY)
     return raw ? JSON.parse(raw) : { items: [], drawerOpen: false }
@@ -66,3 +66,4 @@ export function useCartCtx() {
   if (!ctx) throw new Error('useCartCtx must be used within CartProvider')
   return ctx
 }
+
