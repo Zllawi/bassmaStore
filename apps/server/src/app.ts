@@ -18,9 +18,21 @@ const app = express()
 // When behind reverse proxies (e.g., Render/Heroku/Nginx), trust the proxy to get correct IPs
 app.set('trust proxy', 1)
 
-// Helmet: allow cross-origin resource policy so SPA on different port can load /uploads images
+// Helmet: set CSP to allow external images (e.g., Cloudinary) and relax CORP
 app.use(helmet({
-  crossOriginResourcePolicy: { policy: 'cross-origin' }
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      imgSrc: ["'self'", 'data:', 'blob:', 'https:', 'res.cloudinary.com'],
+      mediaSrc: ["'self'", 'data:', 'blob:', 'https:'],
+      connectSrc: ["'self'", 'https:', 'http:'],
+      scriptSrc: ["'self'", "'unsafe-inline'", 'https:'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https:'],
+      fontSrc: ["'self'", 'https:', 'data:'],
+      frameSrc: ["'self'", 'https:']
+    }
+  }
 }))
 // CORS: allow configured origin plus common local dev variants
 const configuredOrigins = (env.CORS_ORIGIN || '')
