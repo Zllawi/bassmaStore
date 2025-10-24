@@ -110,15 +110,18 @@ function Row({ o, idx, onStatus, onInvoice, onDelete }: {
   const brandName = (import.meta as any).env?.VITE_BRAND_NAME || 'متجر بسمة'
 
   const openPrint = () => {
-    const w = window.open('', '_blank', 'noopener,noreferrer,width=850,height=900')
-    if (!w) return
-    const rows = (o.items || []).map(it => `
+    const rows = (o.items || [])
+      .map(
+        (it) => `
       <tr>
         <td style="padding:6px 8px;text-align:right">${it.name || ''}</td>
         <td style="padding:6px 8px;text-align:center">${it.qty}</td>
         <td style="padding:6px 8px;text-align:left">${formatCurrency(it.price)}</td>
         <td style="padding:6px 8px;text-align:left">${formatCurrency(it.price * it.qty)}</td>
-      </tr>`).join('')
+      </tr>`
+      )
+      .join('')
+
     const html = `<!doctype html><html lang="ar" dir="rtl"><head>
       <meta charset="utf-8" />
       <title>فاتورة ${invoice || o.invoiceRef || o._id.slice(-6)}</title>
@@ -180,10 +183,26 @@ function Row({ o, idx, onStatus, onInvoice, onDelete }: {
           </tfoot>
         </table>
       </div>
-      <script>window.onload=()=>window.print()</script>
     </body></html>`
-    w.document.write(html)
-    w.document.close()
+
+    const iframe = document.createElement('iframe')
+    iframe.style.position = 'fixed'
+    iframe.style.right = '0'
+    iframe.style.bottom = '0'
+    iframe.style.width = '0'
+    iframe.style.height = '0'
+    iframe.style.border = '0'
+    document.body.appendChild(iframe)
+    const doc = iframe.contentWindow?.document
+    if (!doc) return
+    doc.open()
+    doc.write(html)
+    doc.close()
+    iframe.onload = () => {
+      iframe.contentWindow?.focus()
+      iframe.contentWindow?.print()
+      setTimeout(() => document.body.removeChild(iframe), 300)
+    }
   }
 
   return (

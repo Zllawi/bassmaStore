@@ -1,4 +1,4 @@
-﻿import type { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 type ModalProps = {
@@ -26,7 +26,7 @@ export default function Modal({ open, onClose, children, ariaLabel = 'مربع �
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="card relative w-full max-w-2xl p-4">
+            <div className="card relative w-full max-w-3xl p-5">
               <button
                 type="button"
                 className="btn-icon absolute right-4 top-4 h-10 w-10"
@@ -43,7 +43,4 @@ export default function Modal({ open, onClose, children, ariaLabel = 'مربع �
     </AnimatePresence>
   )
 }
-
-
-
 
