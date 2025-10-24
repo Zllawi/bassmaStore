@@ -39,8 +39,29 @@ export default function Register() {
           <input className="input" placeholder="الاسم الكامل" value={name} onChange={e => setName(e.target.value)} required />
           <input className="input" placeholder="البريد الإلكتروني" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
           <input className="input" placeholder="كلمة المرور" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-          <input className="input" placeholder="رقم الجوال" value={phone} onChange={e => setPhone(e.target.value)} required />
-          <input className="input" placeholder="المدينة" value={city} onChange={e => setCity(e.target.value)} required />
+          <input className="input" placeholder="رقم الهاتف" value={phone} onChange={e => setPhone(e.target.value)} required />
+          <select className="input" value={city} onChange={e => setCity(e.target.value)} required>
+            <option value="" disabled>اختر المدينة</option>
+            <option>طرابلس</option>
+            <option>بنغازي</option>
+            <option>مصراتة</option>
+            <option>الزاوية</option>
+            <option>زليتن</option>
+            <option>سبها</option>
+            <option>سرت</option>
+            <option>درنة</option>
+            <option>البيضاء</option>
+            <option>طبرق</option>
+            <option>أجدابيا</option>
+            <option>غريان</option>
+            <option>نالوت</option>
+            <option>غات</option>
+            <option>الجفرة</option>
+            <option>وادي الشاطئ</option>
+            <option>مرزق</option>
+            <option>بني وليد</option>
+            <option>زوارة</option>
+          </select>
           <input className="input" placeholder="الحي / المنطقة" value={region} onChange={e => setRegion(e.target.value)} required />
           <textarea className="input sm:col-span-2" placeholder="تفاصيل العنوان" rows={3} value={addressDescription} onChange={e => setAddressDescription(e.target.value)} required />
           <button className="btn sm:col-span-2" type="submit">إنشاء الحساب</button>
@@ -54,6 +75,8 @@ export default function Register() {
     </section>
   )
 }
+
+
 
 
 

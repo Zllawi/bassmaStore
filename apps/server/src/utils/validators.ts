@@ -1,7 +1,7 @@
-import { z } from 'zod'
+﻿import { z } from 'zod'
 
 export const libyaCities = z.enum([
-  'طرابلس','بنغازي','مصراتة','سبها','سرت','البيضاء','درنة','الزاوية','زليتن','أجدابيا'
+  \u0027طرابلس\u0027,\u0027بنغازي\u0027,\u0027مصراتة\u0027,\u0027الزاوية\u0027,\u0027زليتن\u0027,\u0027سبها\u0027,\u0027سرت\u0027,\u0027درنة\u0027,\u0027البيضاء\u0027,\u0027طبرق\u0027,\u0027أجدابيا\u0027,\u0027غريان\u0027,\u0027نالوت\u0027,\u0027غات\u0027,\u0027الجفرة\u0027,\u0027وادي الشاطئ\u0027,\u0027مرزق\u0027,\u0027بني وليد\u0027,\u0027زوارة\u0027
 ])
 
 export const registerSchema = z.object({
@@ -42,3 +42,4 @@ export const orderCreateSchema = z.object({
   region: z.string().min(2).optional(),
   addressDescription: z.string().min(4).optional()
 })
+
