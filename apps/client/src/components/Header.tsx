@@ -152,7 +152,7 @@ export default function Header() {
         <button
           type="submit"
           className={`absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-xl transition-colors ${searchOpen ? "bg-accent/20 text-accent" : "text-white/70 hover:text-accent"}`}
-          aria-label="تنفيذ البحث"
+          aria-label="بحث"
           onClick={handleSearchButtonClick}
         >
           <SearchIcon className="h-5 w-5" />
@@ -182,7 +182,7 @@ export default function Header() {
 
           <div className="ml-auto flex items-center gap-2 md:hidden">
             {renderSearchForm("mobile")}
-            <button type="button" className="btn-icon" onClick={toggleDrawer} aria-label="فتح سلة المشتريات">
+            <button type="button" className="btn-icon" onClick={toggleDrawer} aria-label="فتح السلة">
               <CartIcon className="h-5 w-5" />
               {totalQty > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-semibold text-dark2">
@@ -190,7 +190,7 @@ export default function Header() {
                 </span>
               )}
             </button>
-            <button type="button" className="btn-icon" aria-label="تبديل نمط الواجهة" onClick={toggleTheme}>
+            <button type="button" className="btn-icon" aria-label="تغيير السمة" onClick={toggleTheme}>
               {theme === "dark" ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
             </button>
           </div>
@@ -207,36 +207,31 @@ export default function Header() {
             </Link>
           ))}
           {isAdmin && (
-            <Link to="/admin" className="whitespace-nowrap rounded-xl bg-white/10 px-3 py-2 text-light transition hover:bg-white/15">
-              لوحة التحكم
-            </Link>
+            <Link to="/admin" className="whitespace-nowrap rounded-xl bg-white/10 px-3 py-2 text-light transition hover:bg-white/15">لوحة الإدارة</Link>
           )}
-        </nav>
+          {user && (<>
+            <Link to="/me/orders" className="whitespace-nowrap rounded-xl px-3 py-2 transition hover:bg-white/10 hover:text-accent">طلباتي</Link>
+            <Link to="/me/settings" className="whitespace-nowrap rounded-xl px-3 py-2 transition hover:bg-white/10 hover:text-accent">إعدادات الحساب</Link>
+          </>)}      </nav>
 
         <div className="order-last hidden items-center gap-2 md:order-none md:flex">
           {renderSearchForm("desktop")}
-          <button type="button" className="btn-icon" aria-label="تبديل نمط الواجهة" onClick={toggleTheme}>
+          <button type="button" className="btn-icon" aria-label="تغيير السمة" onClick={toggleTheme}>
             {theme === "dark" ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
           </button>
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
           {user ? (
-            <button type="button" className="btn whitespace-nowrap bg-white/10 px-5 text-sm text-light" onClick={onLogout}>
-              تسجيل خروج
-            </button>
+            <button type="button" className="btn whitespace-nowrap bg-white/10 px-5 text-sm text-light" onClick={onLogout}>تسجيل الخروج</button>
           ) : (
             <>
-              <Link to="/login" className="btn whitespace-nowrap bg-white/10 px-5 text-sm text-light">
-                تسجيل الدخول
-              </Link>
-              <Link to="/register" className="btn whitespace-nowrap px-5 text-sm">
-                إنشاء حساب
-              </Link>
+              <Link to="/login" className="btn whitespace-nowrap bg-white/10 px-5 text-sm text-light">تسجيل الدخول</Link>
+              <Link to="/register" className="btn whitespace-nowrap px-5 text-sm">إنشاء حساب</Link>
             </>
           )}
 
-          <button type="button" className="btn-icon" onClick={toggleDrawer} aria-label="فتح سلة المشتريات">
+          <button type="button" className="btn-icon" onClick={toggleDrawer} aria-label="فتح السلة">
             <CartIcon className="h-5 w-5" />
             {totalQty > 0 && (
               <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-semibold text-dark2">
@@ -251,6 +246,9 @@ export default function Header() {
     </header>
   )
 }
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-﻿import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -39,19 +39,19 @@ export default function SideMenu({ open, onClose, user, onLogout }: SideMenuProp
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs tracking-wide text-white/50">مرحبًا بك</p>
-                <p className="text-lg font-semibold text-white">${brandName || "متجر بسمة"}</p>
+                <p className="text-lg font-semibold text-white">{brandName || 'متجر بسمة'}</p>
               </div>
-              <button type="button" className="btn-icon" onClick={onClose} aria-label="قائمة جانبية">X</button>
+              <button type="button" className="btn-icon" onClick={onClose} aria-label="إغلاق القائمة">X</button>
             </div>
 
-            <nav className="space-y-4" aria-label="قائمة جانبية">
+            <nav className="space-y-4" aria-label="روابط القائمة">
               <div className="space-y-2">
                 <Link
                   to="/?category=hair"
                   onClick={onClose}
                   className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10 hover:text-accent"
                 >
-                  <span>ظ…ظ†طھط¬ط§طھ ط§ظ„ط´ط¹ط±</span>
+                  <span>العناية بالشعر</span>
                   <span className="text-white/40">&gt;</span>
                 </Link>
                 <Link
@@ -59,7 +59,7 @@ export default function SideMenu({ open, onClose, user, onLogout }: SideMenuProp
                   onClick={onClose}
                   className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10 hover:text-accent"
                 >
-                  <span>ظ…ظ†طھط¬ط§طھ ط§ظ„ط¨ط´ط±ط©</span>
+                  <span>العناية بالبشرة</span>
                   <span className="text-white/40">&gt;</span>
                 </Link>
               </div>
@@ -67,14 +67,14 @@ export default function SideMenu({ open, onClose, user, onLogout }: SideMenuProp
               {!user && (
                 <div className="space-y-2">
                   <button type="button" className="btn w-full" onClick={() => handleNavigate('/login')}>
-                    طھط³ط¬ظٹظ„ ط§ظ„ط¯ط®ظˆظ„
+                    تسجيل الدخول
                   </button>
                   <button
                     type="button"
                     className="btn w-full bg-white/10 text-light hover:bg-white/20"
                     onClick={() => handleNavigate('/register')}
                   >
-                    ط¥ظ†ط´ط§ط، ط­ط³ط§ط¨
+                    إنشاء حساب
                   </button>
                 </div>
               )}
@@ -87,7 +87,7 @@ export default function SideMenu({ open, onClose, user, onLogout }: SideMenuProp
                       className="btn w-full"
                       onClick={() => handleNavigate('/admin')}
                     >
-                      ظ„ظˆط­ط© ط§ظ„ط¥ط¯ط§ط±ط©
+                      لوحة الإدارة
                     </button>
                   )}
                   <button
@@ -95,21 +95,21 @@ export default function SideMenu({ open, onClose, user, onLogout }: SideMenuProp
                     className="btn w-full bg-white/10 text-light hover:bg-white/20"
                     onClick={() => handleNavigate('/me/orders')}
                   >
-                    ط·ظ„ط¨ط§طھظٹ
+                    طلباتي
                   </button>
                   <button
                     type="button"
                     className="btn w-full bg-white/10 text-light hover:bg-white/20"
                     onClick={() => handleNavigate('/me/settings')}
                   >
-                    ط¥ط¹ط¯ط§ط¯ط§طھ ط§ظ„ط­ط³ط§ط¨
+                    إعدادات الحساب
                   </button>
                   <button
                     type="button"
                     className="btn w-full bg-red-500/80 text-light hover:bg-red-500/90"
                     onClick={() => { onLogout(); onClose() }}
                   >
-                    طھط³ط¬ظٹظ„ ط®ط±ظˆط¬
+                    تسجيل الخروج
                   </button>
                 </div>
               )}
@@ -121,5 +121,4 @@ export default function SideMenu({ open, onClose, user, onLogout }: SideMenuProp
     document.body
   )
 }
-
 
