@@ -21,16 +21,16 @@ export default function Modal({ open, onClose, children, ariaLabel = 'مربع �
             exit={{ opacity: 0 }}
           />
           <motion.div
-            className="fixed inset-0 flex items-center justify-center p-4"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 20, opacity: 0 }}
+            className="fixed inset-0 flex items-start justify-center overflow-y-auto p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
             <div className="card relative w-full max-w-2xl p-4">
               <button
                 type="button"
                 className="btn-icon absolute right-4 top-4 h-10 w-10"
-                aria-label="مربع حوار"
+                aria-label="إغلاق الحوار"
                 onClick={onClose}
               >
                 X
@@ -43,6 +43,7 @@ export default function Modal({ open, onClose, children, ariaLabel = 'مربع �
     </AnimatePresence>
   )
 }
+
 
 
 
