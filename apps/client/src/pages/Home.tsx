@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "react-router-dom"
 import api from "../services/api"
 import ProductCard, { Product } from "../components/ProductCard"
+import ImageCarousel from "../components/ImageCarousel"
 import { formatCurrency } from "../utils/currency"
 import Modal from "../components/Modal"
 
@@ -56,7 +57,9 @@ export default function Home() {
       <Modal open={!!quick} onClose={() => setQuick(null)} ariaLabel="نظرة سريعة على المنتج">
         {quick && (
           <div className="flex flex-col gap-4 sm:flex-row">
-            <img src={quick.images?.[0] || "/placeholder.svg"} alt={quick.name} className="h-40 w-40 rounded-xl object-cover sm:h-48 sm:w-48" />
+            <div className="sm:w-72 w-full">
+              <ImageCarousel images={quick.images} alt={quick.name} />
+            </div>
             <div className="space-y-3">
               <h3 className="text-xl font-semibold text-white">{quick.name}</h3>
               <p className="text-accent text-lg">{formatCurrency(quick.price)}</p>

@@ -2,6 +2,7 @@
 import { useQuery } from '@tanstack/react-query'
 import api from '../services/api'
 import { formatCurrency } from '../utils/currency'
+import ImageCarousel from '../components/ImageCarousel'
 import { useCart } from '../features/cart/useCart'
 
 export default function ProductDetails() {
@@ -19,7 +20,7 @@ export default function ProductDetails() {
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <img src={product.images?.[0] || '/placeholder.svg'} alt={product.name} className="w-full rounded-xl object-cover" />
+      <ImageCarousel images={product.images} alt={product.name} className="w-full" />
       <div className="space-y-4">
         <h1 className="text-3xl font-bold text-white">{product.name}</h1>
         <p className="text-accent text-2xl">{formatCurrency(product.price)}</p>
