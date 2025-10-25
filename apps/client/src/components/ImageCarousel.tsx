@@ -29,6 +29,14 @@ export default function ImageCarousel({
   const [direction, setDirection] = useState<1 | -1>(1)
   const [paused, setPaused] = useState(false)
 
+  // Preload images to avoid flicker between slides
+  useEffect(() => {
+    slides.forEach((src) => {
+      const img = new Image()
+      img.src = src
+    })
+  }, [slides])
+
   const go = (dir: 1 | -1) => {
     setDirection(dir)
     setIndex((i) => {
@@ -68,17 +76,20 @@ export default function ImageCarousel({
             else if (info.offset.x > 50) go(-1)
           }}
         >
-          <AnimatePresence initial={false} custom={direction}>
+          <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.img
               key={slides[index]}
               src={slides[index]}
               alt={alt}
               className="h-full w-full object-cover"
               custom={direction}
-              initial={{ opacity: 0, x: direction * 30 }}
+              initial={{ opacity: 0, x: direction * 16 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -direction * 30 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
+              exit={{ opacity: 0, x: -direction * 16 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              style={{ willChange: 'transform, opacity' }}
+              draggable={false}
+              decoding="async"
             />
           </AnimatePresence>
         </motion.div>
@@ -89,7 +100,7 @@ export default function ImageCarousel({
               type="button"
               aria-label="السابق"
               className="btn-icon absolute left-2 top-1/2 z-10 -translate-y-1/2 bg-black/40 text-white hover:bg-black/60"
-              onClick={() => go(-1)}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); go(-1) }}
             >
               ‹
             </button>
@@ -97,7 +108,7 @@ export default function ImageCarousel({
               type="button"
               aria-label="التالي"
               className="btn-icon absolute right-2 top-1/2 z-10 -translate-y-1/2 bg-black/40 text-white hover:bg-black/60"
-              onClick={() => go(1)}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); go(1) }}
             >
               ›
             </button>
