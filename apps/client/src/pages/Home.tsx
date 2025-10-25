@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom"
 import api from "../services/api"
 import ProductCard, { Product } from "../components/ProductCard"
 import ImageCarousel from "../components/ImageCarousel"
+import ImageCarousel from "../components/ImageCarousel"
 import { formatCurrency } from "../utils/currency"
 import Modal from "../components/Modal"
 
@@ -21,9 +22,15 @@ export default function Home() {
   }, [brandName])
 
   const products = useMemo<Product[]>(() => data?.data || [], [data])
+  const heroImages = useMemo(() => (products || []).map(p => p.images?.[0]).filter(Boolean) as string[], [products])
 
   return (
     <div className="space-y-10 px-2 pb-12 sm:px-0">
+      {!!heroImages.length && (
+        <section className="container mx-auto max-w-6xl">
+          <ImageCarousel images={heroImages} alt="" className="w-full" aspect="aspect-[16/9]" />
+        </section>
+      )}
       <section className="card bg-gradient-to-br from-accent/15 via-transparent to-dark2/40 p-6 text-center sm:p-8">
         <h1 className="text-2xl font-bold text-white sm:text-3xl">عناية متكاملة لجمالك اليومي</h1>
         <p className="mt-3 text-sm text-white/70 sm:text-base">
