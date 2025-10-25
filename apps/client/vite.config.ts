@@ -1,9 +1,10 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(({ mode }) => {
-  const brandName = process.env.VITE_BRAND_NAME || 'متجر حديث'
+  const env = loadEnv(mode, process.cwd(), '')
+  const brandName = env.VITE_BRAND_NAME || 'متجر حديث'
   const themeColor = '#FF6F61'
   return {
     plugins: [
