@@ -22,6 +22,8 @@ export default function Home() {
 
   const products = useMemo<Product[]>(() => data?.data || [], [data])
   const heroImages = useMemo(() => (products || []).map(p => p.images?.[0]).filter(Boolean) as string[], [products])
+  const q = (params.get('q') || '').trim()
+  const isSearch = q.length > 0
 
   return (
     <div className="space-y-10 px-2 pb-12 sm:px-0">
@@ -30,17 +32,17 @@ export default function Home() {
           <ImageCarousel images={heroImages} alt="" className="w-full" aspect="aspect-[21/9]" fit="contain" />
         </section>
       )}
-      <section className="card bg-gradient-to-br from-accent/15 via-transparent to-dark2/40 p-6 text-center sm:p-8">
-        <h1 className="text-2xl font-bold text-white sm:text-3xl">عناية متكاملة لجمالك اليومي</h1>
-        <p className="mt-3 text-sm text-white/70 sm:text-base">
-          استكشف مجموعة منتقاة بعناية من المنتجات التي تلائم مختلف احتياجات العناية. {brandName ? `${brandName} يهتم بتجديد روتينك كل يوم.` : "ابدأ يومك بروتين متكامل بخطوات بسيطة."}
-        </p>
-        <div className="mt-5 flex flex-wrap justify-center gap-3">
-          <a className="btn w-full max-w-[220px] sm:w-auto" href="/?category=hair">تسوق منتجات الشعر</a>
-          <a className="btn w-full max-w-[220px] bg-white/10 text-light hover:bg-white/20 sm:w-auto" href="/?category=skin">تسوق منتجات البشرة</a>
-        </div>
-      </section>
-
+      {isSearch && !isLoading && products.length === 0 && (
+        <section className="card p-6 text-center sm:p-8">
+          <h2 className="text-xl font-semibold text-white">لا توجد نتائج مطابقة لـ "{q}"</h2>
+          <p className="mt-2 text-white/70">جرّب كلمات أقل، أو تصفّح جميع الأقسام.</p>
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            <a className="btn" href="/">عرض الكل</a>
+            <a className="btn bg-white/10 text-light hover:bg-white/20" href="/?category=hair">قسم الشعر</a>
+            <a className="btn bg-white/10 text-light hover:bg-white/20" href="/?category=skin">قسم البشرة</a>
+          </div>
+        </section>
+      )}
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-white/70">
           <span className="font-medium text-white">تصفية سريعة</span>
@@ -77,6 +79,11 @@ export default function Home() {
     </div>
   )
 }
+
+
+
+
+
 
 
 

@@ -51,8 +51,9 @@ function MoonIcon({ className }: IconProps) {
 }
 
 const categories = [
-  { label: "العناية بالشعر", value: "hair" },
-  { label: "العناية بالبشرة", value: "skin" }
+  { label: "كل", value: "" },
+  { label: "الشعر", value: "hair" },
+  { label: "البشرة", value: "skin" }
 ]
 
 export default function Header() {
@@ -200,7 +201,7 @@ export default function Header() {
           {categories.map(cat => (
             <Link
               key={cat.value}
-              to={`/?category=${cat.value}`}
+              to={cat.value ? `/?category=${cat.value}` : "/"}
               className="whitespace-nowrap rounded-xl px-3 py-2 transition hover:bg-white/10 hover:text-accent"
             >
               {cat.label}
@@ -246,6 +247,8 @@ export default function Header() {
     </header>
   )
 }
+
+
 
 
 
