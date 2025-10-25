@@ -20,7 +20,7 @@ export default function ProductDetails() {
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <ImageCarousel images={product.images} alt={product.name} className="w-full" />
+      <ImageCarousel images={product.images} alt={product.name} className="w-full" fit="contain" />
       <div className="space-y-4">
         <h1 className="text-3xl font-bold text-white">{product.name}</h1>
         <p className="text-accent text-2xl">{formatCurrency(product.price)}</p>

@@ -27,7 +27,7 @@ export default function Home() {
     <div className="space-y-10 px-2 pb-12 sm:px-0">
       {!!heroImages.length && (
         <section className="container mx-auto max-w-4xl">
-          <ImageCarousel images={heroImages} alt="" className="w-full" aspect="aspect-[21/9]" />
+          <ImageCarousel images={heroImages} alt="" className="w-full" aspect="aspect-[21/9]" fit="contain" />
         </section>
       )}
       <section className="card bg-gradient-to-br from-accent/15 via-transparent to-dark2/40 p-6 text-center sm:p-8">
@@ -64,7 +64,7 @@ export default function Home() {
         {quick && (
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="sm:w-72 w-full">
-              <ImageCarousel images={quick.images} alt={quick.name} />
+              <ImageCarousel images={quick.images} alt={quick.name} aspect="aspect-square" fit="contain" />
             </div>
             <div className="space-y-3">
               <h3 className="text-xl font-semibold text-white">{quick.name}</h3>

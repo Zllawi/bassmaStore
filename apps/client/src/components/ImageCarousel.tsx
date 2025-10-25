@@ -11,6 +11,7 @@ type Props = {
   autoPlay?: boolean
   intervalMs?: number
   pauseOnHover?: boolean
+  fit?: 'cover' | 'contain'
 }
 
 export default function ImageCarousel({
@@ -22,12 +23,14 @@ export default function ImageCarousel({
   aspect = 'aspect-[4/3]',
   autoPlay = true,
   intervalMs = 3500,
-  pauseOnHover = true
+  pauseOnHover = true,
+  fit = 'contain'
 }: Props) {
   const slides = useMemo(() => (images && images.length ? images : ['/placeholder.svg']), [images])
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState<1 | -1>(1)
   const [paused, setPaused] = useState(false)
+  const fitClass = fit === 'contain' ? 'object-contain' : 'object-cover'
 
   // Preload images to avoid flicker between slides
   useEffect(() => {
@@ -68,7 +71,7 @@ export default function ImageCarousel({
     >
       <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5">
         <motion.div
-          className={`${aspect} w-full`}
+          className={`${aspect} w-full flex items-center justify-center`}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={(_, info) => {
@@ -81,7 +84,7 @@ export default function ImageCarousel({
               key={slides[index]}
               src={slides[index]}
               alt={alt}
-              className="h-full w-full object-cover"
+              className={`h-full w-full ${fitClass}`}
               custom={direction}
               initial={{ opacity: 0, x: direction * 16 }}
               animate={{ opacity: 1, x: 0 }}
