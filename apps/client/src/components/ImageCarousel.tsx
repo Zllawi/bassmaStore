@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+﻿import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 type Props = {
@@ -7,12 +7,27 @@ type Props = {
   className?: string
   loop?: boolean
   showThumbs?: boolean
+  aspect?: string
+  autoPlay?: boolean
+  intervalMs?: number
+  pauseOnHover?: boolean
 }
 
-export default function ImageCarousel({ images, alt = '', className = '', loop = true, showThumbs = true }: Props) {
+export default function ImageCarousel({
+  images,
+  alt = '',
+  className = '',
+  loop = true,
+  showThumbs = false,
+  aspect = 'aspect-[4/3]',
+  autoPlay = true,
+  intervalMs = 3500,
+  pauseOnHover = true
+}: Props) {
   const slides = useMemo(() => (images && images.length ? images : ['/placeholder.svg']), [images])
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState<1 | -1>(1)
+  const [paused, setPaused] = useState(false)
 
   const go = (dir: 1 | -1) => {
     setDirection(dir)
@@ -29,11 +44,23 @@ export default function ImageCarousel({ images, alt = '', className = '', loop =
     setIndex(i)
   }
 
+  useEffect(() => {
+    if (!autoPlay || slides.length <= 1) return
+    if (pauseOnHover && paused) return
+    const id = setInterval(() => go(1), Math.max(1500, intervalMs))
+    return () => clearInterval(id)
+  }, [autoPlay, intervalMs, slides.length, paused])
+
   return (
-    <div className={`select-none ${className}`} aria-roledescription="carousel">
+    <div
+      className={`select-none ${className}`}
+      aria-roledescription="carousel"
+      onMouseEnter={() => pauseOnHover && setPaused(true)}
+      onMouseLeave={() => pauseOnHover && setPaused(false)}
+    >
       <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5">
         <motion.div
-          className="aspect-[4/3] w-full"
+          className={`${aspect} w-full`}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={(_, info) => {
@@ -98,4 +125,3 @@ export default function ImageCarousel({ images, alt = '', className = '', loop =
     </div>
   )
 }
-

@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom"
 import api from "../services/api"
 import ProductCard, { Product } from "../components/ProductCard"
 import ImageCarousel from "../components/ImageCarousel"
-import ImageCarousel from "../components/ImageCarousel"
 import { formatCurrency } from "../utils/currency"
 import Modal from "../components/Modal"
 
@@ -27,8 +26,8 @@ export default function Home() {
   return (
     <div className="space-y-10 px-2 pb-12 sm:px-0">
       {!!heroImages.length && (
-        <section className="container mx-auto max-w-6xl">
-          <ImageCarousel images={heroImages} alt="" className="w-full" aspect="aspect-[16/9]" />
+        <section className="container mx-auto max-w-4xl">
+          <ImageCarousel images={heroImages} alt="" className="w-full" aspect="aspect-[21/9]" />
         </section>
       )}
       <section className="card bg-gradient-to-br from-accent/15 via-transparent to-dark2/40 p-6 text-center sm:p-8">
