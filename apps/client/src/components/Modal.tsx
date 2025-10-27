@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react'
+﻿import type { ReactNode } from 'react'
+import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 type ModalProps = {
@@ -8,20 +9,33 @@ type ModalProps = {
   ariaLabel?: string
 }
 
-export default function Modal({ open, onClose, children, ariaLabel = 'مربع حوار' }: ModalProps) {
+export default function Modal({ open, onClose, children, ariaLabel = 'نافذة منبثقة' }: ModalProps) {
+  // Close on Escape and lock body scroll when open
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+  }, [open, onClose])
+
   return (
     <AnimatePresence>
       {open && (
         <div aria-modal="true" role="dialog" aria-label={ariaLabel}>
           <motion.div
-            className="fixed inset-0 bg-black/60"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
           <motion.div
-            className="fixed inset-0 flex items-start justify-center overflow-y-auto p-6"
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -30,7 +44,7 @@ export default function Modal({ open, onClose, children, ariaLabel = 'مربع �
               <button
                 type="button"
                 className="btn-icon absolute right-4 top-4 h-10 w-10"
-                aria-label="إغلاق الحوار"
+                aria-label="إغلاق النافذة"
                 onClick={onClose}
               >
                 X
@@ -43,4 +57,3 @@ export default function Modal({ open, onClose, children, ariaLabel = 'مربع �
     </AnimatePresence>
   )
 }
-
