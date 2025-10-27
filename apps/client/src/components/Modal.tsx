@@ -28,19 +28,19 @@ export default function Modal({ open, onClose, children, ariaLabel = 'نافذة
       {open && (
         <div aria-modal="true" role="dialog" aria-label={ariaLabel}>
           <motion.div
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[10000] bg-black/60 backdrop-blur-sm"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
           <motion.div
-            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-6"
+            className="fixed inset-0 z-[10001] flex items-center justify-center overflow-y-auto p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="card relative w-full max-w-3xl p-5">
+            <div className="card relative w-full max-w-3xl p-5 max-h-[85vh] overflow-auto mt-10 md:mt-0">
               <button
                 type="button"
                 className="btn-icon absolute right-4 top-4 h-10 w-10"
