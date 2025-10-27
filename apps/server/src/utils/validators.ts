@@ -1,10 +1,7 @@
 ﻿import { z } from 'zod'
 
 // NOTE: keep this file saved as UTF-8 to allow Arabic labels
-export const libyaCities = z.enum([
-  'طرابلس','بنغازي','مصراتة','الزاوية','زليتن','سبها','سرت','درنة','البيضاء','طبرق',
-  'أجدابيا','غريان','نالوت','غات','الجفرة','وادي الشاطئ','مرزق','بني وليد','زوارة'
-])
+export const libyaCities = z.string().min(1)
 
 export const registerSchema = z.object({
   name: z.string().min(2),
