@@ -12,6 +12,7 @@ type Props = {
   intervalMs?: number
   pauseOnHover?: boolean
   fit?: 'cover' | 'contain'
+  showDots?: boolean
 }
 
 export default function ImageCarousel({
@@ -24,7 +25,8 @@ export default function ImageCarousel({
   autoPlay = true,
   intervalMs = 3500,
   pauseOnHover = true,
-  fit = 'contain'
+  fit = 'contain',
+  showDots = true
 }: Props) {
   const slides = useMemo(() => (images && images.length ? images : ['/placeholder.svg']), [images])
   const [index, setIndex] = useState(0)
@@ -61,6 +63,12 @@ export default function ImageCarousel({
     const id = setInterval(() => go(1), Math.max(1500, intervalMs))
     return () => clearInterval(id)
   }, [autoPlay, intervalMs, slides.length, paused])
+
+  useEffect(() => {
+    const onVis = () => { if (document.hidden) setPaused(true); else setPaused(false) }
+    document.addEventListener('visibilitychange', onVis)
+    return () => document.removeEventListener('visibilitychange', onVis)
+  }, [])
 
   return (
     <div
@@ -133,6 +141,19 @@ export default function ImageCarousel({
             >
               <img src={src} alt="" className="h-full w-full object-cover" />
             </button>
+          ))}
+        </div>
+      )}
+
+      {showDots && slides.length > 1 && (
+        <div className="mt-2 flex justify-center gap-2">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goto(i)}
+              aria-label={`الذهاب إلى الشريحة ${i+1}`}
+              className={`h-2.5 w-2.5 rounded-full transition ${i===index ? 'bg-accent' : 'bg-white/30 hover:bg-white/60'}`}
+            />
           ))}
         </div>
       )}

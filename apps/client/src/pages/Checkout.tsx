@@ -38,17 +38,18 @@ export default function Checkout() {
     setSuccess('')
     try {
       const chosen = addresses.find((a:any)=>a.id===selectedAddr) || addresses.find((a:any)=>a.isDefault)
-      const payload = {
+      const payload: any = {
         items: items.map(i => ({ productId: i.id, qty: i.qty, price: i.price })),
-        total,
-        ...(chosen ? {
-          customerName: chosen.name,
-          customerPhone: chosen.phone,
-          city: chosen.city,
-          region: chosen.region,
-          address: [chosen.city, chosen.region, chosen.address].filter(Boolean).join(' - '),
-          addressDescription: chosen.addressDescription || ''
-        } : {})
+        total
+      }
+      if (chosen) {
+        payload.customerName = chosen.name
+        payload.customerPhone = chosen.phone
+        payload.city = chosen.city
+        payload.region = chosen.region
+        payload.address = [chosen.city, chosen.region, chosen.address].filter(Boolean).join(' - ')
+        const desc = (chosen.addressDescription || '').trim()
+        if (desc.length >= 4) payload.addressDescription = desc
       }
       await api.post('/orders', payload)
       clear()

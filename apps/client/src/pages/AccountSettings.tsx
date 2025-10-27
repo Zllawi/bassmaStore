@@ -83,7 +83,7 @@ export default function AccountSettings() {
                     {a.addressDescription && <div className="text-xs text-white/50">{a.addressDescription}</div>}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {!a.isDefault && <button className="btn bg-white/10" onClick={() => makeDefault(a.id)}>تعيين افتراضي</button>}
+                    {!a.isDefault && <button className="btn bg-white/10" disabled={!a.id} onClick={() => a.id && makeDefault(a.id)}>تعيين افتراضي</button>}
                     <button className="btn bg-white/10" onClick={() => startEdit(a)}>تعديل</button>
                     <button className="btn bg-red-500/80" onClick={() => del(a.id)}>حذف</button>
                   </div>
