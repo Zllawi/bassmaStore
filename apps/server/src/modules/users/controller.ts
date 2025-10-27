@@ -50,7 +50,9 @@ export const myAddresses = asyncHandler(async (req: Request, res: Response) => {
 export const addAddress = asyncHandler(async (req: Request, res: Response) => {
   const uid = req.user!.id
   const id = new mongoose.Types.ObjectId().toString()
-  const a = { id, ...req.body }
+  // Never allow client to override server-generated id
+  const { id: _ignoredId, ...rest } = req.body as any
+  const a = { ...rest, id }
   const u = await usersRepo.updateById(uid, { $push: { addresses: a } } as any)
   const addresses = (u as any)?.addresses || []
   res.status(201).json({ data: addresses })
@@ -60,8 +62,10 @@ export const updateAddress = asyncHandler(async (req: Request, res: Response) =>
   const uid = req.user!.id
   const { id } = req.params
   // update that matches subdocument by id
+  // Prevent updating the id field
+  const entries = Object.entries(req.body).filter(([k]) => k !== 'id')
   await User.findByIdAndUpdate(uid, {
-    $set: Object.fromEntries(Object.entries(req.body).map(([k,v]) => ([`addresses.$[el].${k}`, v])))
+    $set: Object.fromEntries(entries.map(([k,v]) => ([`addresses.$[el].${k}`, v])))
   }, { arrayFilters: [{ 'el.id': id }] })
   const u = await usersRepo.findById(uid)
   res.json({ data: (u as any)?.addresses || [] })
