@@ -1,4 +1,5 @@
 ﻿import { useEffect, useMemo, useState } from 'react'
+import api from '../services/api'
 
 type Address = {
   id: string
@@ -15,13 +16,12 @@ type Address = {
 const KEY = 'my-addresses'
 
 export default function AccountSettings() {
-  const [list, setList] = useState<Address[]>(() => {
-    try { return JSON.parse(localStorage.getItem(KEY) || '[]') } catch { return [] }
-  })
+  const [list, setList] = useState<Address[]>([])
   const [editing, setEditing] = useState<Address | null>(null)
   const [form, setForm] = useState<Address>({ id: '', label: '', name: '', phone: '', city: '', region: '', address: '', addressDescription: '' } as Address)
 
   useEffect(() => { document.title = 'إعدادات الحساب' }, [])
+  useEffect(() => { (async()=>{ try { const r = await api.get('/users/me/addresses'); setList(r.data?.data||[]) } catch { try { setList(JSON.parse(localStorage.getItem(KEY)||'[]')) } catch {} } })() }, [])
   useEffect(() => { localStorage.setItem(KEY, JSON.stringify(list)) }, [list])
 
   const defaultId = useMemo(() => list.find(a => a.isDefault)?.id, [list])
@@ -29,18 +29,19 @@ export default function AccountSettings() {
   const startAdd = () => { setEditing({ id: '', name: '', phone: '', city: '', region: '', address: '', addressDescription: '', label: '' } as Address); setForm({ id: '', name: '', phone: '', city: '', region: '', address: '', addressDescription: '', label: '' } as Address) }
   const startEdit = (a: Address) => { setEditing(a); setForm(a) }
   const cancel = () => { setEditing(null) }
-  const save = () => {
-    const id = form.id || crypto.randomUUID()
-    const next: Address = { ...form, id }
-    setList(prev => {
-      const exists = prev.some(a => a.id === id)
-      const updated = exists ? prev.map(a => a.id === id ? next : a) : [...prev, next]
-      return updated
-    })
+  const save = async () => {
+    if (!form.name || !form.phone || !form.city || !form.region || !form.address) return
+    if (!form.id) {
+      const r = await api.post('/users/me/addresses', { ...form })
+      setList(r.data?.data || [])
+    } else {
+      const r = await api.patch(`/users/me/addresses/${form.id}`, { ...form })
+      setList(r.data?.data || [])
+    }
     setEditing(null)
   }
-  const del = (id: string) => setList(prev => prev.filter(a => a.id !== id))
-  const makeDefault = (id: string) => setList(prev => prev.map(a => ({ ...a, isDefault: a.id === id })))
+  const del = async (id: string) => { const r = await api.delete(`/users/me/addresses/${id}`); setList(r.data?.data || []) }
+  const makeDefault = async (id: string) => { const r = await api.patch(`/users/me/addresses/${id}/default`); setList(r.data?.data || []) }
 
   return (
     <section className="space-y-6">

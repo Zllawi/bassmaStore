@@ -18,8 +18,8 @@ export const usersRepo = {
   async findAll() {
     return User.find().select('-password').limit(200)
   },
-  async updateById(id: string, patch: Partial<IUser>) {
-    return User.findByIdAndUpdate(id, patch, { new: true }).select('-password')
+  async updateById(id: string, patch: Partial<IUser> | any, options: any = {}) {
+    return User.findByIdAndUpdate(id, patch, { new: true, ...options }).select('-password')
   },
   async deleteById(id: string) {
     await User.findByIdAndDelete(id)

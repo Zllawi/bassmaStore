@@ -15,7 +15,7 @@ export default function CartDrawer() {
   return (
     <AnimatePresence>
       {drawerOpen && (
-        <div aria-live="polite" aria-label="إغلاق السلة">
+        <div aria-live="polite" aria-label="سلة المشتريات">
           <motion.div
             className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
             onClick={toggleDrawer}
@@ -24,7 +24,7 @@ export default function CartDrawer() {
             exit={{ opacity: 0 }}
           />
           <motion.aside
-            className="fixed right-0 top-0 h-full w-full overflow-auto border-l border-white/10 bg-dark2 p-4 sm:w-[420px]"
+            className="fixed right-0 top-0 z-50 h-full w-full overflow-auto border-l border-white/10 bg-dark2 p-4 shadow-2xl sm:w-[420px]"
             initial={{ x: 420 }}
             animate={{ x: 0 }}
             exit={{ x: 420 }}
@@ -56,7 +56,7 @@ export default function CartDrawer() {
                       <button
                         className="btn-ghost h-10 w-10"
                         onClick={() => dec(item.id)}
-                        aria-label="إغلاق السلة"
+                        aria-label="تنقيص الكمية"
                       >
                         -
                       </button>
@@ -66,7 +66,7 @@ export default function CartDrawer() {
                       <button
                         className="btn-ghost h-10 w-10"
                         onClick={() => inc(item.id)}
-                        aria-label="إغلاق السلة"
+                        aria-label="زيادة الكمية"
                       >
                         +
                       </button>
@@ -74,7 +74,7 @@ export default function CartDrawer() {
                     <button
                       className="btn-ghost bg-red-500/80 text-light hover:bg-red-500/90"
                       onClick={() => remove(item.id)}
-                      aria-label="إغلاق السلة"
+                      aria-label="حذف المنتج"
                     >
                       حذف
                     </button>
@@ -92,7 +92,7 @@ export default function CartDrawer() {
                   تفريغ
                 </button>
                 <button className="btn" onClick={goCheckout}>
-                  إتمام الشراء
+                  إتمام الطلب
                 </button>
               </div>
             </div>
@@ -102,8 +102,3 @@ export default function CartDrawer() {
     </AnimatePresence>
   )
 }
-
-
-
-
-

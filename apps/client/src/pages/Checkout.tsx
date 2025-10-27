@@ -16,6 +16,12 @@ export default function Checkout() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    (async () => {
+      try { const r = await api.get('/users/me/addresses'); setAddresses(r.data?.data || []) } catch {}
+    })()
+  }, [])
+
+  useEffect(() => {
     try {
       const raw = localStorage.getItem('auth')
       const u = raw ? JSON.parse(raw) : null
