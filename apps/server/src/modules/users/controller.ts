@@ -24,8 +24,26 @@ export const remove = asyncHandler(async (req: Request, res: Response) => {
 // Addresses for current user
 export const myAddresses = asyncHandler(async (req: Request, res: Response) => {
   const uid = req.user!.id
-  const u = await usersRepo.findById(uid)
-  const addresses = (u as any)?.addresses || []
+  let u = await usersRepo.findById(uid) as any
+  let addresses = (u as any)?.addresses || []
+  // If user has legacy address data but no addresses array, create a default one once
+  if ((!addresses || addresses.length === 0) && (u?.phone || u?.city || u?.region || u?.addressDescription)) {
+    const composed = [u?.city, u?.region, u?.addressDescription].filter(Boolean).join(' - ')
+    const a: any = {
+      id: new mongoose.Types.ObjectId().toString(),
+      label: 'العنوان الأساسي',
+      name: u?.name || '',
+      phone: u?.phone || '',
+      city: u?.city || '',
+      region: u?.region || '',
+      address: composed || u?.addressDescription || '',
+      addressDescription: u?.addressDescription || '',
+      isDefault: true
+    }
+    await usersRepo.updateById(uid, { $push: { addresses: a } } as any)
+    u = await usersRepo.findById(uid) as any
+    addresses = u?.addresses || []
+  }
   res.json({ data: addresses })
 })
 
