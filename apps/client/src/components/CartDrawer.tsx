@@ -15,9 +15,9 @@ export default function CartDrawer() {
   return (
     <AnimatePresence>
       {drawerOpen && (
-        <div aria-live="polite" aria-label="سلة المشتريات">
+        <div aria-live="polite" aria-label="إغلاق السلة">
           <motion.div
-            className="fixed inset-0 bg-black/60"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
             onClick={toggleDrawer}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -35,7 +35,7 @@ export default function CartDrawer() {
                 type="button"
                 className="btn-icon h-10 w-10"
                 onClick={toggleDrawer}
-                aria-label="سلة المشتريات"
+                aria-label="إغلاق السلة"
               >
                 X
               </button>
@@ -56,7 +56,7 @@ export default function CartDrawer() {
                       <button
                         className="btn-ghost h-10 w-10"
                         onClick={() => dec(item.id)}
-                        aria-label="سلة المشتريات"
+                        aria-label="إغلاق السلة"
                       >
                         -
                       </button>
@@ -66,7 +66,7 @@ export default function CartDrawer() {
                       <button
                         className="btn-ghost h-10 w-10"
                         onClick={() => inc(item.id)}
-                        aria-label="سلة المشتريات"
+                        aria-label="إغلاق السلة"
                       >
                         +
                       </button>
@@ -74,7 +74,7 @@ export default function CartDrawer() {
                     <button
                       className="btn-ghost bg-red-500/80 text-light hover:bg-red-500/90"
                       onClick={() => remove(item.id)}
-                      aria-label="سلة المشتريات"
+                      aria-label="إغلاق السلة"
                     >
                       حذف
                     </button>
@@ -102,6 +102,7 @@ export default function CartDrawer() {
     </AnimatePresence>
   )
 }
+
 
 
 
