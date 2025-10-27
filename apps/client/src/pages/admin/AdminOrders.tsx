@@ -22,11 +22,28 @@ type Order = {
 }
 
 const statusOptions: { value: Order['status']; label: string }[] = [
-  { value: 'pending', label: 'قيد المُعالجة' },
+  { value: 'pending', label: 'قيد المعالجة' },
   { value: 'paid', label: 'مدفوعة' },
   { value: 'shipped', label: 'قيد الشحن' },
   { value: 'canceled', label: 'ملغاة' }
 ]
+
+// Normalize and de-duplicate address parts for display
+const renderAddress = (o: Order) => {
+  const parts: string[] = []
+  const push = (s?: string) => {
+    const t = (s || '').trim()
+    if (!t) return
+    if (!parts.includes(t)) parts.push(t)
+  }
+  if (o.address) {
+    o.address.split(/\s*-\s*/).forEach(push)
+  }
+  push(o.city)
+  push(o.region)
+  push(o.addressDescription)
+  return parts.join(' - ')
+}
 
 export default function AdminOrders() {
   const qc = useQueryClient()
@@ -154,7 +171,7 @@ function Row({ o, idx, onStatus, onInvoice, onDelete }: {
           </div>
           <div style="grid-column:1/3">
             <div style="font-size:12px;color:#555">العنوان</div>
-            <div>${[(o.address||''), o.city, o.region, o.addressDescription].filter(Boolean).join(' - ')}</div>
+            <div>${renderAddress(o)}</div>
           </div>
         </div>
         <table class="table">
@@ -219,7 +236,7 @@ function Row({ o, idx, onStatus, onInvoice, onDelete }: {
         </div>
       </td>
       <td className="p-2 max-w-[420px]">
-        <div className="text-xs text-white/80 break-words">{(o.address && o.address.trim()) || [o.city, o.region, o.addressDescription].filter(Boolean).join(' - ')}</div>
+        <div className="text-xs text-white/80 break-words">{renderAddress(o)}</div>
       </td>
       <td className="p-2">{new Date(o.createdAt).toLocaleString('ar-LY')}</td>
       <td className="p-2">
@@ -229,63 +246,63 @@ function Row({ o, idx, onStatus, onInvoice, onDelete }: {
           <button className="btn bg-red-500/80" onClick={onDelete}>حذف</button>
         </div>
         <Modal open={showInvoice} onClose={() => setShowInvoice(false)} ariaLabel="عرض تفاصيل الفاتورة">
-        <div className="space-y-4">
-          <header className="flex items-center justify-between">
-            <div className="text-lg font-semibold">{brandName}</div>
-            <div>
-              <div className="text-white/60 text-sm">مرجع الفاتورة</div>
-              <div>{invoice || o.invoiceRef || o._id}</div>
+          <div className="space-y-4">
+            <header className="flex items-center justify-between">
+              <div className="text-lg font-semibold">{brandName}</div>
+              <div>
+                <div className="text-white/60 text-sm">مرجع الفاتورة</div>
+                <div>{invoice || o.invoiceRef || o._id}</div>
+              </div>
+            </header>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="card p-3">
+                <div className="text-white/60 text-sm">العميل</div>
+                <div>{o.customerName || '-'}</div>
+                <div className="text-white/60 text-sm">الهاتف: {o.customerPhone || '-'}</div>
+              </div>
+              <div className="card p-3">
+                <div className="text-white/60 text-sm">التاريخ</div>
+                <div>{new Date(o.createdAt).toLocaleString('ar-LY')}</div>
+                <div className="text-white/60 text-sm">الحالة: {statusOptions.find(s=>s.value===o.status)?.label || o.status}</div>
+              </div>
+              <div className="card p-3 sm:col-span-2">
+                <div className="text-white/60 text-sm">العنوان</div>
+                <div>{renderAddress(o)}</div>
+              </div>
             </div>
-          </header>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="card p-3">
-              <div className="text-white/60 text-sm">العميل</div>
-              <div>{o.customerName || '-'}</div>
-              <div className="text-white/60 text-sm">الهاتف: {o.customerPhone || '-'}</div>
-            </div>
-            <div className="card p-3">
-              <div className="text-white/60 text-sm">التاريخ</div>
-              <div>{new Date(o.createdAt).toLocaleString('ar-LY')}</div>
-              <div className="text-white/60 text-sm">الحالة: {statusOptions.find(s=>s.value===o.status)?.label || o.status}</div>
-            </div>
-            <div className="card p-3 sm:col-span-2">
-              <div className="text-white/60 text-sm">العنوان</div>
-              <div>{[o.address,o.city,o.region,o.addressDescription].filter(Boolean).join(' - ')}</div>
-            </div>
-          </div>
-          <div className="overflow-auto">
-            <table className="w-full text-sm">
-              <thead className="text-white/60">
-                <tr>
-                  <th className="p-2 text-right">المنتج</th>
-                  <th className="p-2 text-center">الكمية</th>
-                  <th className="p-2 text-left">السعر</th>
-                  <th className="p-2 text-left">الإجمالي</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(o.items||[]).map((it, i) => (
-                  <tr key={i} className="border-t border-white/10">
-                    <td className="p-2 text-right">{it.name || ''}</td>
-                    <td className="p-2 text-center">{it.qty}</td>
-                    <td className="p-2 text-left">{formatCurrency(it.price)}</td>
-                    <td className="p-2 text-left">{formatCurrency(it.price * it.qty)}</td>
+            <div className="overflow-auto">
+              <table className="w-full text-sm">
+                <thead className="text-white/60">
+                  <tr>
+                    <th className="p-2 text-right">المنتج</th>
+                    <th className="p-2 text-center">الكمية</th>
+                    <th className="p-2 text-left">السعر</th>
+                    <th className="p-2 text-left">الإجمالي</th>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="border-t border-white/10">
-                  <td className="p-2 text-right font-semibold" colSpan={3}>الإجمالي</td>
-                  <td className="p-2 text-left font-semibold">{formatCurrency(o.total)}</td>
-                </tr>
-              </tfoot>
-            </table>
+                </thead>
+                <tbody>
+                  {(o.items||[]).map((it, i) => (
+                    <tr key={i} className="border-t border-white/10">
+                      <td className="p-2 text-right">{it.name || ''}</td>
+                      <td className="p-2 text-center">{it.qty}</td>
+                      <td className="p-2 text-left">{formatCurrency(it.price)}</td>
+                      <td className="p-2 text-left">{formatCurrency(it.price * it.qty)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t border-white/10">
+                    <td className="p-2 text-right font-semibold" colSpan={3}>الإجمالي</td>
+                    <td className="p-2 text-left font-semibold">{formatCurrency(o.total)}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button className="btn bg-white/10" onClick={() => setShowInvoice(false)}>إغلاق</button>
+              <button className="btn" onClick={openPrint}>طباعة</button>
+            </div>
           </div>
-          <div className="flex justify-end gap-2">
-            <button className="btn bg-white/10" onClick={() => setShowInvoice(false)}>إغلاق</button>
-            <button className="btn" onClick={openPrint}>طباعة</button>
-          </div>
-        </div>
         </Modal>
       </td>
     </tr>
