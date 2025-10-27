@@ -30,18 +30,37 @@ export default function AccountSettings() {
   const startEdit = (a: Address) => { setEditing(a); setForm(a) }
   const cancel = () => { setEditing(null) }
   const save = async () => {
-    if (!form.name || !form.phone || !form.city || !form.region || !form.address) return
-    if (!form.id) {
-      const r = await api.post('/users/me/addresses', { ...form })
-      setList(r.data?.data || [])
-    } else {
-      const r = await api.patch(`/users/me/addresses/${form.id}`, { ...form })
-      setList(r.data?.data || [])
+    try {
+      if (!form.name || !form.phone || !form.city || !form.region || !form.address) return
+      if (!form.id) {
+        const r = await api.post('/users/me/addresses', { ...form })
+        setList(r.data?.data || [])
+      } else {
+        const r = await api.patch(`/users/me/addresses/${form.id}`, { ...form })
+        setList(r.data?.data || [])
+      }
+      setEditing(null)
+    } catch (e) {
+      // swallow to avoid unhandled promise rejection; optionally log
+      console.error('Failed to save address', e)
     }
-    setEditing(null)
   }
-  const del = async (id: string) => { const r = await api.delete(`/users/me/addresses/${id}`); setList(r.data?.data || []) }
-  const makeDefault = async (id: string) => { const r = await api.patch(`/users/me/addresses/${id}/default`); setList(r.data?.data || []) }
+  const del = async (id: string) => {
+    try {
+      const r = await api.delete(`/users/me/addresses/${id}`)
+      setList(r.data?.data || [])
+    } catch (e) {
+      console.error('Failed to delete address', e)
+    }
+  }
+  const makeDefault = async (id: string) => {
+    try {
+      const r = await api.patch(`/users/me/addresses/${id}/default`)
+      setList(r.data?.data || [])
+    } catch (e) {
+      console.error('Failed to set default address', e)
+    }
+  }
 
   return (
     <section className="space-y-6">
