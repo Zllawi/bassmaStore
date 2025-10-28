@@ -8,9 +8,7 @@ export default function Checkout() {
   const { items, total, clear } = useCart()
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [addresses, setAddresses] = useState<any[]>(() => {
-    try { return JSON.parse(localStorage.getItem('my-addresses') || '[]') } catch { return [] }
-  })
+  const [addresses, setAddresses] = useState<any[]>([])
   const defaultAddressId = useMemo(() => addresses.find((a:any)=>a.isDefault)?.id as string|undefined, [addresses])
   const [selectedAddr, setSelectedAddr] = useState<string | undefined>(defaultAddressId)
   const navigate = useNavigate()
