@@ -44,6 +44,20 @@ export const myAddresses = asyncHandler(async (req: Request, res: Response) => {
     u = await usersRepo.findById(uid) as any
     addresses = u?.addresses || []
   }
+  // Ensure each address has an id; repair if needed
+  let repaired = false
+  const fixed = (addresses || []).map((a: any) => {
+    if (!a?.id || String(a.id).trim() === '') {
+      repaired = true
+      return { ...a, id: new mongoose.Types.ObjectId().toString() }
+    }
+    return a
+  })
+  if (repaired) {
+    await usersRepo.updateById(uid, { addresses: fixed } as any)
+    const nu = await usersRepo.findById(uid) as any
+    return res.json({ data: (nu?.addresses || []) })
+  }
   res.json({ data: addresses })
 })
 
