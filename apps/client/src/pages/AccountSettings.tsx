@@ -46,6 +46,7 @@ export default function AccountSettings() {
     }
   }
   const del = async (id: string) => {
+    if (!id) { console.warn('Skip delete: missing id'); return }
     try {
       const r = await api.delete(`/users/me/addresses/${id}`)
       setList(r.data?.data || [])
@@ -54,6 +55,7 @@ export default function AccountSettings() {
     }
   }
   const makeDefault = async (id: string) => {
+    if (!id) { console.warn('Skip makeDefault: missing id'); return }
     try {
       const r = await api.patch(`/users/me/addresses/${id}/default`)
       setList(r.data?.data || [])
