@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Bassma Store</string>
+    <string name="title_activity_main">Bassma Store</string>
+    <string name="package_name">com.bassma.store</string>
+    <string name="custom_url_scheme">com.bassma.store</string>
+</resources>
